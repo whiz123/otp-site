@@ -1,20 +1,7 @@
 <script>
 async function loadData() {
-  // load services
-  const servicesRes = await fetch("https://otp-backend-srw4.onrender.com/services");
-  const services = await servicesRes.json();
 
-  const serviceSelect = document.getElementById("service");
-  serviceSelect.innerHTML = "";
-
-  services.forEach(s => {
-    const option = document.createElement("option");
-    option.value = s;
-    option.text = s;
-    serviceSelect.appendChild(option);
-  });
-
-  // load countries
+  // 🔹 LOAD COUNTRIES
   const countryRes = await fetch("https://otp-backend-srw4.onrender.com/countries");
   const countries = await countryRes.json();
 
@@ -24,9 +11,36 @@ async function loadData() {
   countries.forEach(c => {
     const option = document.createElement("option");
     option.value = c;
-    option.text = c;
+    option.text = c.toUpperCase();
     countrySelect.appendChild(option);
   });
+
+  // 🔹 FUNCTION TO LOAD SERVICES
+  async function loadServices() {
+    const selectedCountry = countrySelect.value;
+
+    const serviceRes = await fetch(
+      `https://otp-backend-srw4.onrender.com/services?country=${selectedCountry}`
+    );
+
+    const services = await serviceRes.json();
+
+    const serviceSelect = document.getElementById("service");
+    serviceSelect.innerHTML = "";
+
+    services.forEach(s => {
+      const option = document.createElement("option");
+      option.value = s;
+      option.text = s;
+      serviceSelect.appendChild(option);
+    });
+  }
+
+  // 🔹 FIRST LOAD
+  await loadServices();
+
+  // 🔹 WHEN COUNTRY CHANGES
+  countrySelect.addEventListener("change", loadServices);
 }
 
 loadData();
