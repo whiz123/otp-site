@@ -3,39 +3,113 @@
 <html>
 <head>
   <title>OTP Store</title>
+
   <style>
     body {
-      font-family: Arial;
-      text-align: center;
-      background: #0f172a;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
       color: white;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
+
+    .container {
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
     h1 {
-      margin-top: 50px;
+      font-size: 40px;
+      margin-bottom: 10px;
     }
+
+    p {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: none;
+      margin-bottom: 20px;
+      font-size: 16px;
+      outline: none;
+    }
+
     button {
-      padding: 15px 30px;
+      width: 100%;
+      padding: 16px;
       font-size: 18px;
       background: #22c55e;
       border: none;
       color: white;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #16a34a;
+      transform: scale(1.05);
     }
   </style>
+
+  <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
+
 </head>
+
 <body>
 
-<h1>Buy OTP Numbers 📲</h1>
-<p>Fast • Cheap • Reliable</p>
+  <div class="container">
+    <h1>Buy OTP Numbers 📲</h1>
+    <p>Fast • Secure • Reliable</p>
+
+```
+<input type="email" id="email" placeholder="Enter your email" />
 
 <button onclick="buyOTP()">Buy OTP</button>
+```
 
-<script>
-function buyOTP() {
-  alert("Payment system coming next 🔥");
-}
-</script>
+  </div>
+
+  <script>
+    function buyOTP() {
+      var email = document.getElementById("email").value;
+
+      if (!email) {
+        alert("Enter your email first ❗");
+        return;
+      }
+
+      Korapay.initialize({
+        key: pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq
+        reference: "OTP_" + Date.now(),
+        amount: 400000,
+        currency: "NGN",
+        customer: {
+          name: "Customer",
+          email: email
+        },
+        onSuccess: function () {
+          alert("Payment successful ✅");
+
+          // 👉 THIS IS WHERE YOUR API WILL COME
+          alert("OTP will be sent soon...");
+        },
+        onClose: function () {
+          alert("Payment cancelled");
+        }
+      });
+    }
+  </script>
 
 </body>
 </html>
