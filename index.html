@@ -33,6 +33,7 @@
       font-size: 14px;
       opacity: 0.8;
       margin-bottom: 20px;
+      line-height: 1.5;
     }
 
     select {
@@ -44,13 +45,16 @@
       font-size: 16px;
     }
 
+    /* ✅ FIXED EMAIL INPUT */
     input {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       margin: 8px 0;
       border-radius: 10px;
       border: none;
       font-size: 15px;
+      height: 44px; /* keeps it clean, not bulky */
+      box-sizing: border-box;
     }
 
     button {
@@ -120,7 +124,6 @@ async function loadData() {
       }
     }
 
-    // 🌍 LOAD COUNTRIES
     const countries = await fetchWithRetry("https://otp-backend-srw4.onrender.com/countries");
 
     countrySelect.innerHTML = "";
@@ -131,7 +134,6 @@ async function loadData() {
       countrySelect.appendChild(option);
     });
 
-    // 📱 LOAD SERVICES
     async function loadServices() {
       serviceSelect.innerHTML = "<option>Loading...</option>";
 
@@ -161,7 +163,6 @@ async function loadData() {
   }
 }
 
-// 🟢 BUTTON CLICK
 document.getElementById("buyBtn").addEventListener("click", () => {
   const email = document.getElementById("email").value;
 
