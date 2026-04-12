@@ -8,7 +8,7 @@
 
   <!-- ✅ CORRECT KORAPAY SCRIPT -->
 
-  <script src="https://checkout.korapay.com/korapay-collections.min.js"></script>
+  <script src="https://js.korapay.com/v1/korapay.js"></script>
 
   <style>
     * {
@@ -96,25 +96,28 @@
         return;
       }
 
-      console.log("Clicked ✅");
-
-      if (typeof Korapay === "undefined") {
+      // ✅ CHECK IF SCRIPT LOADED
+      if (typeof KorapayCheckout === "undefined") {
         alert("Korapay not loaded ❌");
         return;
       }
 
-      Korapay.initialize({
-        key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq", // 🔴 PUT YOUR REAL KEY
+      // ✅ PAYMENT STARTS HERE
+      KorapayCheckout({
+        key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq", // 🔴 PUT YOUR REAL KEY HERE
         reference: "OTP_" + Date.now(),
         amount: 400000, // ₦4000
         currency: "NGN",
+
         customer: {
           name: "Customer",
           email: email
         },
+
         onSuccess: function () {
           alert("Payment successful ✅");
         },
+
         onClose: function () {
           alert("Payment cancelled ❌");
         }
