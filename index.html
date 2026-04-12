@@ -1,44 +1,42 @@
 <!DOCTYPE html>
-
 <html>
 <head>
   <title>Buy OTP Numbers</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: white;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      background: linear-gradient(135deg, #020024, #090979, #000000);
+      font-family: Arial;
+      color: white;
     }
 
     .container {
+      text-align: center;
       width: 90%;
       max-width: 500px;
-      text-align: center;
     }
 
     h1 {
-      font-size: 38px;
-      margin-bottom: 15px;
+      font-size: 40px;
+      margin-bottom: 10px;
     }
 
     p {
-      opacity: 0.7;
+      color: #ccc;
       margin-bottom: 30px;
     }
 
     input {
       width: 100%;
       padding: 18px;
-      border-radius: 12px;
-      border: none;
       font-size: 18px;
+      border-radius: 10px;
+      border: none;
       margin-bottom: 20px;
     }
 
@@ -48,30 +46,30 @@
       font-size: 20px;
       background: #22c55e;
       border: none;
+      border-radius: 10px;
       color: white;
-      border-radius: 12px;
       cursor: pointer;
     }
-  </style>
 
+    button:hover {
+      background: #16a34a;
+    }
+  </style>
 </head>
 
 <body>
 
   <div class="container">
-    <h1>Buy OTP Numbers 📲</h1>
+    <h1>Buy OTP Numbers 📱</h1>
     <p>Fast • Secure • Reliable</p>
 
-```
-<input type="email" id="email" placeholder="Enter your email">
+    <input type="email" id="email" placeholder="Enter your email" />
 
-<button onclick="payNow()">Buy OTP</button>
-```
-
+    <button onclick="buyOTP()">Buy OTP</button>
   </div>
 
   <script>
-    function payNow() {
+    async function buyOTP() {
       const email = document.getElementById("email").value;
 
       if (!email) {
@@ -79,16 +77,26 @@
         return;
       }
 
-      const amount = 4000;
+      try {
+        const res = await fetch("https://YOUR-BACKEND-URL.onrender.com/pay", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email })
+        });
 
-      const url =
-        "https://checkout.korapay.com/pay" +
-        "?amount=" + amount +
-        "&currency=NGN" +
-        "&reference=OTP_" + Date.now() +
-        "&customer_email=" + encodeURIComponent(email);
+        const data = await res.json();
 
-      window.location.href = url;
+        if (data.checkout_url) {
+          window.location.href = data.checkout_url;
+        } else {
+          alert("Payment error ❌");
+        }
+
+      } catch (err) {
+        alert("Server error ❌");
+      }
     }
   </script>
 
