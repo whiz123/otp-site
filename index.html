@@ -1,104 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Buy OTP Numbers</title>
+<script>
+async function loadData() {
+  // load services
+  const servicesRes = await fetch("https://otp-backend-srw4.onrender.com/services");
+  const services = await servicesRes.json();
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #020024, #090979, #000000);
-      font-family: Arial;
-      color: white;
-    }
+  const serviceSelect = document.getElementById("service");
+  serviceSelect.innerHTML = "";
 
-    .container {
-      text-align: center;
-      width: 90%;
-      max-width: 500px;
-    }
+  services.forEach(s => {
+    const option = document.createElement("option");
+    option.value = s;
+    option.text = s;
+    serviceSelect.appendChild(option);
+  });
 
-    h1 {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
+  // load countries
+  const countryRes = await fetch("https://otp-backend-srw4.onrender.com/countries");
+  const countries = await countryRes.json();
 
-    p {
-      color: #ccc;
-      margin-bottom: 30px;
-    }
+  const countrySelect = document.getElementById("country");
+  countrySelect.innerHTML = "";
 
-    input {
-      width: 100%;
-      padding: 18px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: none;
-      margin-bottom: 20px;
-    }
+  countries.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c;
+    option.text = c;
+    countrySelect.appendChild(option);
+  });
+}
 
-    button {
-      width: 100%;
-      padding: 18px;
-      font-size: 20px;
-      background: #22c55e;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #16a34a;
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="container">
-    <h1>Buy OTP Numbers 📱</h1>
-    <p>Fast • Secure • Reliable</p>
-
-    <input type="email" id="email" placeholder="Enter your email" />
-
-    <button onclick="buyOTP()">Buy OTP</button>
-  </div>
-
-  <script>
-    async function buyOTP() {
-      const email = document.getElementById("email").value;
-
-      if (!email) {
-        alert("Enter your email ❗");
-        return;
-      }
-
-      try {
-        const res = await fetch("https://otp-backend-srw4.onrender.com/pay", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ email })
-        });
-
-        const data = await res.json();
-
-        if (data.checkout_url) {
-          window.location.href = data.checkout_url;
-        } else {
-          alert("Payment error ❌");
-        }
-
-      } catch (err) {
-        alert("Server error ❌");
-      }
-    }
-  </script>
-
-</body>
-</html>
+loadData();
+</script>
