@@ -13,56 +13,66 @@
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #020024, #090979, #000000);
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       color: white;
     }
 
     .box {
       text-align: center;
-      width: 95%;
-      max-width: 500px;
-      padding: 20px;
+      width: 90%;
+      max-width: 420px;
+      margin: auto;
     }
 
     h1 {
-      font-size: 36px;
-      margin-bottom: 25px;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
-    select, input {
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-bottom: 20px;
+    }
+
+    select {
       width: 100%;
-      padding: 18px;
-      margin: 12px 0;
+      padding: 16px;
+      margin: 10px 0;
       border-radius: 12px;
       border: none;
-      font-size: 18px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 15px;
     }
 
     button {
       width: 100%;
-      padding: 18px;
+      padding: 16px;
       background: linear-gradient(90deg, #00c853, #009624);
       border: none;
       color: white;
-      font-size: 20px;
+      font-size: 18px;
       border-radius: 12px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     button:active {
       transform: scale(0.97);
     }
 
-    @media (max-width: 500px) {
-      h1 {
-        font-size: 28px;
-      }
-
-      select, input, button {
-        font-size: 18px;
-        padding: 16px;
-      }
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      opacity: 0.7;
     }
   </style>
 </head>
@@ -72,13 +82,23 @@
 <div class="box">
   <h1>Buy OTP Numbers 📱</h1>
 
+  <div class="subtitle">
+    Fast • Secure • Reliable <br>
+    Global virtual numbers for all countries <br>
+    Activate accounts instantly with real-time OTP delivery
+  </div>
+
   <select id="country"></select>
 
   <select id="service"></select>
 
-  <input type="email" id="email" placeholder="Enter email">
+  <input type="email" id="email" placeholder="Enter your email">
 
   <button id="buyBtn">Buy OTP</button>
+
+  <div class="footer">
+    Trusted worldwide • Instant activation • 24/7 availability
+  </div>
 </div>
 
 <script>
@@ -100,7 +120,7 @@ async function loadData() {
       }
     }
 
-    // LOAD COUNTRIES
+    // 🌍 LOAD COUNTRIES
     const countries = await fetchWithRetry("https://otp-backend-srw4.onrender.com/countries");
 
     countrySelect.innerHTML = "";
@@ -111,7 +131,7 @@ async function loadData() {
       countrySelect.appendChild(option);
     });
 
-    // LOAD SERVICES
+    // 📱 LOAD SERVICES
     async function loadServices() {
       serviceSelect.innerHTML = "<option>Loading...</option>";
 
@@ -136,21 +156,21 @@ async function loadData() {
     countrySelect.addEventListener("change", loadServices);
 
   } catch (err) {
-    alert("Error loading data. Refresh page.");
+    alert("Error loading data. Please refresh.");
     console.log(err);
   }
 }
 
-// BUTTON CLICK
+// 🟢 BUTTON CLICK
 document.getElementById("buyBtn").addEventListener("click", () => {
   const email = document.getElementById("email").value;
 
   if (!email) {
-    alert("Enter email");
+    alert("Please enter your email");
     return;
   }
 
-  alert("Next step: pricing + payment 💰");
+  alert("Next: price + payment 💰");
 });
 
 loadData();
