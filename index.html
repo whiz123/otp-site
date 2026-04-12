@@ -97,7 +97,7 @@
 
   <input type="email" id="email" placeholder="Enter your email">
 
-  <div id="priceBox" class="price">Price: ₦6000</div>
+  <div id="priceBox" class="price">Price: Loading...</div>
 
   <button id="buyBtn">Buy OTP</button>
 
@@ -107,7 +107,10 @@
 </div>
 
 <script>
-// ✅ FORMAT SERVICE NAMES (CLEAN UI)
+
+const API = "https://otp-backend-srw4.onrender.com";
+
+// FORMAT SERVICE NAMES
 function formatService(name) {
   return name
     .replace("whatsapp", "WhatsApp")
@@ -121,15 +124,37 @@ function formatService(name) {
     .replace("google", "Google");
 }
 
+// GET REAL PRICE
+async function updatePrice() {
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
+  const priceBox = document.getElementById("priceBox");
+
+  if (!country || !service) return;
+
+  priceBox.innerText = "Loading price...";
+
+  try {
+    const res = await fetch(
+      `${API}/price?country=${country}&service=${service}`
+    );
+
+    const data = await res.json();
+
+    priceBox.innerText = "Price: ₦" + data.price;
+
+  } catch (err) {
+    priceBox.innerText = "Error loading price";
+  }
+}
+
+// LOAD DATA
 async function loadData() {
   try {
     const countrySelect = document.getElementById("country");
     const serviceSelect = document.getElementById("service");
-    const priceBox = document.getElementById("priceBox");
 
-    const API = "https://otp-backend-srw4.onrender.com";
-
-    // 🌍 LOAD COUNTRIES
+    // LOAD COUNTRIES
     const countries = await fetch(API + "/countries").then(r => r.json());
 
     countrySelect.innerHTML = "";
@@ -141,7 +166,7 @@ async function loadData() {
       countrySelect.appendChild(option);
     });
 
-    // 📱 LOAD SERVICES
+    // LOAD SERVICES
     async function loadServices() {
       const country = countrySelect.value;
 
@@ -156,21 +181,16 @@ async function loadData() {
       services.forEach(s => {
         const option = document.createElement("option");
         option.value = s;
-        option.text = formatService(s); // ✅ FIXED HERE
+        option.text = formatService(s);
         serviceSelect.appendChild(option);
       });
 
-      updatePrice();
-    }
-
-    // 💰 PRICE (STATIC FOR NOW)
-    function updatePrice() {
-      const total = 6000;
-      priceBox.innerText = "Price: ₦" + total;
+      await updatePrice();
     }
 
     await loadServices();
 
+    // EVENTS
     countrySelect.addEventListener("change", loadServices);
     serviceSelect.addEventListener("change", updatePrice);
 
@@ -180,7 +200,7 @@ async function loadData() {
   }
 }
 
-// 🟢 BUY BUTTON
+// BUY BUTTON
 document.getElementById("buyBtn").addEventListener("click", () => {
   const email = document.getElementById("email").value;
 
@@ -193,6 +213,7 @@ document.getElementById("buyBtn").addEventListener("click", () => {
 });
 
 loadData();
+
 </script>
 
 </body>
