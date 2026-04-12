@@ -87,43 +87,37 @@
 
   </div>
 
-  <script>
-    function buyOTP() {
-      const email = document.getElementById("email").value;
+<script>
+function buyOTP() {
+  const email = document.getElementById("email").value;
 
-      if (!email) {
-        alert("Enter your email ❗");
-        return;
+  if (!email) {
+    alert("Enter your email ❗");
+    return;
+  }
+
+  try {
+    KorapayCheckout({
+      key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
+      reference: "OTP_" + Date.now(),
+      amount: 400000,
+      currency: "NGN",
+      customer: {
+        name: "Customer",
+        email: email
+      },
+      onSuccess: function () {
+        alert("Payment successful ✅");
+      },
+      onClose: function () {
+        alert("Payment cancelled ❌");
       }
-
-      // ✅ CHECK IF SCRIPT LOADED
-      if (typeof KorapayCheckout === "undefined") {
-        alert("Korapay not loaded ❌");
-        return;
-      }
-
-      // ✅ PAYMENT STARTS HERE
-      KorapayCheckout({
-        key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq", // 🔴 PUT YOUR REAL KEY HERE
-        reference: "OTP_" + Date.now(),
-        amount: 400000, // ₦4000
-        currency: "NGN",
-
-        customer: {
-          name: "Customer",
-          email: email
-        },
-
-        onSuccess: function () {
-          alert("Payment successful ✅");
-        },
-
-        onClose: function () {
-          alert("Payment cancelled ❌");
-        }
-      });
-    }
-  </script>
+    });
+  } catch (e) {
+    alert("Payment failed to load ❌ Check network or try another browser");
+  }
+}
+</script>
 
 </body>
 </html>
