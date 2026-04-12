@@ -3,6 +3,8 @@
 <head>
   <title>Buy OTP Numbers</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <style>
     body {
       margin: 0;
@@ -17,33 +19,50 @@
 
     .box {
       text-align: center;
-      width: 90%;
-      max-width: 400px;
+      width: 95%;
+      max-width: 500px;
+      padding: 20px;
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: 36px;
+      margin-bottom: 25px;
     }
 
     select, input {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
+      padding: 18px;
+      margin: 12px 0;
+      border-radius: 12px;
       border: none;
-      font-size: 16px;
+      font-size: 18px;
     }
 
     button {
       width: 100%;
-      padding: 14px;
-      background: green;
+      padding: 18px;
+      background: linear-gradient(90deg, #00c853, #009624);
       border: none;
       color: white;
-      font-size: 18px;
-      border-radius: 8px;
+      font-size: 20px;
+      border-radius: 12px;
       cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 28px;
+      }
+
+      select, input, button {
+        font-size: 18px;
+        padding: 16px;
+      }
     }
   </style>
 </head>
@@ -59,19 +78,32 @@
 
   <input type="email" id="email" placeholder="Enter email">
 
-  <button>Buy OTP</button>
+  <button id="buyBtn">Buy OTP</button>
 </div>
 
 <script>
 async function loadData() {
   try {
-    // LOAD COUNTRIES
-    const countryRes = await fetch("https://otp-backend-srw4.onrender.com/countries");
-    const countries = await countryRes.json();
-
     const countrySelect = document.getElementById("country");
-    countrySelect.innerHTML = "";
+    const serviceSelect = document.getElementById("service");
 
+    async function fetchWithRetry(url, retries = 3) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("Network error");
+          return await res.json();
+        } catch (err) {
+          if (i === retries - 1) throw err;
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    }
+
+    // LOAD COUNTRIES
+    const countries = await fetchWithRetry("https://otp-backend-srw4.onrender.com/countries");
+
+    countrySelect.innerHTML = "";
     countries.forEach(c => {
       const option = document.createElement("option");
       option.value = c;
@@ -81,15 +113,14 @@ async function loadData() {
 
     // LOAD SERVICES
     async function loadServices() {
+      serviceSelect.innerHTML = "<option>Loading...</option>";
+
       const selectedCountry = countrySelect.value;
 
-      const serviceRes = await fetch(
+      const services = await fetchWithRetry(
         `https://otp-backend-srw4.onrender.com/services?country=${selectedCountry}`
       );
 
-      const services = await serviceRes.json();
-
-      const serviceSelect = document.getElementById("service");
       serviceSelect.innerHTML = "";
 
       services.forEach(s => {
@@ -105,10 +136,22 @@ async function loadData() {
     countrySelect.addEventListener("change", loadServices);
 
   } catch (err) {
-    alert("Frontend error: " + err.message);
+    alert("Error loading data. Refresh page.");
     console.log(err);
   }
 }
+
+// BUTTON CLICK
+document.getElementById("buyBtn").addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+
+  if (!email) {
+    alert("Enter email");
+    return;
+  }
+
+  alert("Next step: pricing + payment 💰");
+});
 
 loadData();
 </script>
