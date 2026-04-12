@@ -3,28 +3,18 @@
 <html>
 <head>
   <title>Buy OTP Numbers</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ✅ CORRECT KORAPAY SCRIPT -->
-
-  <script src="https://js.korapay.com/v1/korapay.js"></script>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
     body {
-      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: white;
+      height: 100vh;
     }
 
     .container {
@@ -39,7 +29,6 @@
     }
 
     p {
-      font-size: 16px;
       opacity: 0.7;
       margin-bottom: 30px;
     }
@@ -51,7 +40,6 @@
       border: none;
       font-size: 18px;
       margin-bottom: 20px;
-      outline: none;
     }
 
     button {
@@ -63,11 +51,6 @@
       color: white;
       border-radius: 12px;
       cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: #16a34a;
     }
   </style>
 
@@ -82,42 +65,32 @@
 ```
 <input type="email" id="email" placeholder="Enter your email">
 
-<button onclick="buyOTP()">Buy OTP</button>
+<button onclick="payNow()">Buy OTP</button>
 ```
 
   </div>
 
-<script>
-function buyOTP() {
-  const email = document.getElementById("email").value;
+  <script>
+    function payNow() {
+      const email = document.getElementById("email").value;
 
-  if (!email) {
-    alert("Enter your email ❗");
-    return;
-  }
-
-  try {
-    KorapayCheckout({
-      key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
-      reference: "OTP_" + Date.now(),
-      amount: 400000,
-      currency: "NGN",
-      customer: {
-        name: "Customer",
-        email: email
-      },
-      onSuccess: function () {
-        alert("Payment successful ✅");
-      },
-      onClose: function () {
-        alert("Payment cancelled ❌");
+      if (!email) {
+        alert("Enter your email ❗");
+        return;
       }
-    });
-  } catch (e) {
-    alert("Payment failed to load ❌ Check network or try another browser");
-  }
-}
-</script>
+
+      const amount = 4000;
+
+      const url =
+        "https://checkout.korapay.com/pay" +
+        "?amount=" + amount +
+        "&currency=NGN" +
+        "&reference=OTP_" + Date.now() +
+        "&customer_email=" + encodeURIComponent(email);
+
+      window.location.href = url;
+    }
+  </script>
 
 </body>
 </html>
