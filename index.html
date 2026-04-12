@@ -176,6 +176,90 @@ document.getElementById("buyBtn").addEventListener("click", () => {
 
 loadData();
 </script>
+<script>
+async function loadData() {
+  try {
+    const countrySelect = document.getElementById("country");
+    const serviceSelect = document.getElementById("service");
+    const priceBox = document.getElementById("priceBox");
 
+    async function fetchWithRetry(url, retries = 3) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("Network error");
+          return await res.json();
+        } catch (err) {
+          if (i === retries - 1) throw err;
+          await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+    }
+
+    const countries = await fetchWithRetry("https://otp-backend-srw4.onrender.com/countries");
+
+    countrySelect.innerHTML = "";
+    countries.forEach(c => {
+      const option = document.createElement("option");
+      option.value = c;
+      option.text = c.toUpperCase();
+      countrySelect.appendChild(option);
+    });
+
+    async function loadServices() {
+      const selectedCountry = countrySelect.value;
+
+      const services = await fetchWithRetry(
+        `https://otp-backend-srw4.onrender.com/services?country=${selectedCountry}`
+      );
+
+      serviceSelect.innerHTML = "";
+
+      services.forEach(s => {
+        const option = document.createElement("option");
+        option.value = s;
+        option.text = s;
+        serviceSelect.appendChild(option);
+      });
+
+      updatePrice();
+    }
+
+    // 💰 FAKE PRICE FOR NOW (NEXT WE MAKE REAL)
+    function updatePrice() {
+      const basePrice = 2000; // simulate 5SIM price
+      const profit = 4000;
+
+      const total = basePrice + profit;
+
+      priceBox.innerText = "Price: ₦" + total;
+    }
+
+    await loadServices();
+
+    countrySelect.addEventListener("change", loadServices);
+    serviceSelect.addEventListener("change", updatePrice);
+
+  } catch (err) {
+    alert("Error loading data");
+    console.log(err);
+  }
+}
+
+// 🟢 BUY BUTTON
+document.getElementById("buyBtn").addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+
+  if (!email) {
+    alert("Enter email");
+    return;
+  }
+
+  alert("Redirecting to payment 💰");
+});
+
+loadData();
+</script>
+  
 </body>
 </html>
