@@ -1,108 +1,136 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Buy OTP Numbers</title>
+  <title>OTP Service</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
     body {
       margin: 0;
-      height: 100vh;
+      background: #020617;
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #020024, #090979, #000000);
-      font-family: Arial, sans-serif;
-      color: white;
+      min-height: 100vh;
     }
 
-    .box {
-      text-align: center;
-      width: 90%;
+    .container {
+      width: 100%;
       max-width: 420px;
-      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #0f172a;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
+      font-size: 22px;
+      margin-bottom: 5px;
     }
 
     .subtitle {
-      font-size: 14px;
-      opacity: 0.8;
+      font-size: 13px;
+      color: #94a3b8;
       margin-bottom: 20px;
-      line-height: 1.5;
     }
 
-    select {
+    select, input {
       width: 100%;
-      padding: 16px;
-      margin: 10px 0;
-      border-radius: 12px;
-      border: none;
-      font-size: 16px;
-    }
-
-    input {
-      width: 100%;
-      padding: 13px;
-      margin: 8px 0;
+      padding: 14px;
+      margin-top: 10px;
       border-radius: 10px;
-      border: none;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: white;
       font-size: 15px;
-      height: 44px;
-      box-sizing: border-box;
     }
 
     button {
       width: 100%;
-      padding: 16px;
-      background: linear-gradient(90deg, #00c853, #009624);
+      padding: 15px;
+      margin-top: 15px;
       border: none;
+      border-radius: 10px;
+      background: #22c55e;
       color: white;
-      font-size: 18px;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 12px;
-    }
-
-    .price {
-      margin-top: 10px;
       font-size: 16px;
+      cursor: pointer;
       font-weight: bold;
     }
 
-    .footer {
+    .price {
+      margin-top: 15px;
+      font-size: 15px;
+      color: #38bdf8;
+    }
+
+    .result {
       margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #020617;
+      display: none;
+    }
+
+    .result h3 {
+      margin: 5px 0;
+    }
+
+    .otp {
+      font-size: 26px;
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    .copy-btn {
+      margin-top: 10px;
+      background: #334155;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 15px;
       font-size: 12px;
-      opacity: 0.7;
+      color: #64748b;
     }
   </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h1>Buy OTP Numbers 📱</h1>
+<div class="container">
+  <div class="card">
 
-  <div class="subtitle">
-    Fast • Secure • Reliable <br>
-    Global virtual numbers for all countries <br>
-    Activate accounts instantly with real-time OTP delivery
-  </div>
+    <h1>OTP Service 📱</h1>
+    <div class="subtitle">
+      Instant verification • Global numbers • Real-time OTP
+    </div>
 
-  <select id="country"></select>
-  <select id="service"></select>
+    <select id="country"></select>
+    <select id="service"></select>
 
-  <input type="email" id="email" placeholder="Enter your email">
+    <input type="email" id="email" placeholder="Enter your email">
 
-  <div id="priceBox" class="price">Price: Loading...</div>
+    <div id="priceBox" class="price">Price: Loading...</div>
 
-  <button id="buyBtn">Buy OTP</button>
+    <button id="buyBtn">Buy OTP</button>
 
-  <div class="footer">
-    Trusted worldwide • Instant activation • 24/7 availability
+    <div id="resultBox" class="result"></div>
+
+    <div class="footer">
+      🔒 Secure • ⚡ Instant • 🌍 Worldwide
+    </div>
+
   </div>
 </div>
 
@@ -110,7 +138,6 @@
 
 const API = "https://otp-backend-srw4.onrender.com";
 
-// FORMAT SERVICE NAMES
 function formatService(name) {
   return name
     .replace("whatsapp", "WhatsApp")
@@ -124,140 +151,123 @@ function formatService(name) {
     .replace("google", "Google");
 }
 
-// GET REAL PRICE
 async function updatePrice() {
-  const country = document.getElementById("country").value;
-  const service = document.getElementById("service").value;
-  const priceBox = document.getElementById("priceBox");
+  const country = country.value;
+  const service = service.value;
 
   if (!country || !service) return;
 
   priceBox.innerText = "Loading price...";
 
   try {
-    const res = await fetch(
-      `${API}/price?country=${country}&service=${service}`
-    );
-
+    const res = await fetch(`${API}/price?country=${country}&service=${service}`);
     const data = await res.json();
 
     priceBox.innerText = "Price: ₦" + data.price;
-
-  } catch (err) {
+  } catch {
     priceBox.innerText = "Error loading price";
   }
 }
 
-// LOAD DATA
 async function loadData() {
-  try {
-    const countrySelect = document.getElementById("country");
-    const serviceSelect = document.getElementById("service");
+  const countries = await fetch(API + "/countries").then(r => r.json());
 
-    // LOAD COUNTRIES
-    const countries = await fetch(API + "/countries").then(r => r.json());
+  country.innerHTML = "";
+  countries.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.text = c.toUpperCase();
+    country.appendChild(opt);
+  });
 
-    countrySelect.innerHTML = "";
+  async function loadServices() {
+    service.innerHTML = "<option>Loading...</option>";
 
-    countries.forEach(c => {
-      const option = document.createElement("option");
-      option.value = c;
-      option.text = c.toUpperCase();
-      countrySelect.appendChild(option);
+    const services = await fetch(`${API}/services?country=${country.value}`).then(r => r.json());
+
+    service.innerHTML = "";
+    services.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.text = formatService(s);
+      service.appendChild(opt);
     });
 
-    // LOAD SERVICES
-    async function loadServices() {
-      const country = countrySelect.value;
-
-      serviceSelect.innerHTML = "<option>Loading...</option>";
-
-      const services = await fetch(
-        `${API}/services?country=${country}`
-      ).then(r => r.json());
-
-      serviceSelect.innerHTML = "";
-
-      services.forEach(s => {
-        const option = document.createElement("option");
-        option.value = s;
-        option.text = formatService(s);
-        serviceSelect.appendChild(option);
-      });
-
-      await updatePrice();
-    }
-
-    await loadServices();
-
-    // EVENTS
-    countrySelect.addEventListener("change", loadServices);
-    serviceSelect.addEventListener("change", updatePrice);
-
-  } catch (err) {
-    alert("Error loading data. Please refresh.");
-    console.log(err);
+    updatePrice();
   }
+
+  await loadServices();
+
+  country.addEventListener("change", loadServices);
+  service.addEventListener("change", updatePrice);
 }
 
 document.getElementById("buyBtn").addEventListener("click", async () => {
-  const country = document.getElementById("country").value;
-  const service = document.getElementById("service").value;
-  const email = document.getElementById("email").value;
-
-  if (!email) {
-    alert("Enter your email");
+  if (!email.value) {
+    alert("Enter email");
     return;
   }
 
+  resultBox.style.display = "block";
+  resultBox.innerHTML = "⏳ Buying number...";
+
   try {
-    alert("⏳ Buying number...");
+    const res = await fetch(`${API}/buy?country=${country.value}&service=${service.value}`);
+    const data = await res.json();
 
-    const buyRes = await fetch(
-      `${API}/buy?country=${country}&service=${service}`
-    );
+    if (!data.id) {
+      resultBox.innerHTML = "❌ Failed: " + JSON.stringify(data);
+      return;
+    }
 
-    const buyData = await buyRes.json();
+    const phone = data.phone;
+    const id = data.id;
 
-    if (!buyData.id) {
-  alert("❌ Failed: " + JSON.stringify(buyData));
-  console.log("BUY ERROR:", buyData);
-  return;
-}
-
-    const orderId = buyData.id;
-    const phone = buyData.phone;
-
-    alert("✅ Number: " + phone);
+    resultBox.innerHTML = `
+      <p>📱 Number:</p>
+      <h3>${phone}</h3>
+      <p>⏳ Waiting for OTP...</p>
+    `;
 
     let tries = 0;
 
     const interval = setInterval(async () => {
       tries++;
 
-      const checkRes = await fetch(`${API}/check?id=${orderId}`);
-      const checkData = await checkRes.json();
+      const check = await fetch(`${API}/check?id=${id}`);
+      const checkData = await check.json();
 
       if (checkData.sms && checkData.sms.length > 0) {
         clearInterval(interval);
 
         const otp = checkData.sms[0].code;
 
-        alert("🎉 OTP: " + otp);
+        resultBox.innerHTML = `
+          <p>📱 Number:</p>
+          <h3>${phone}</h3>
+          <p>🔐 OTP:</p>
+          <div class="otp" id="otpCode">${otp}</div>
+          <button class="copy-btn" onclick="copyOTP()">Copy OTP</button>
+        `;
       }
 
       if (tries > 20) {
         clearInterval(interval);
-        alert("⌛ No OTP received");
+        resultBox.innerHTML += "<p>⌛ No OTP received</p>";
       }
 
     }, 5000);
 
-  } catch (err) {
-    console.log(err);
-    alert("Error buying number");
+  } catch {
+    resultBox.innerHTML = "❌ Error buying number";
   }
 });
+
+function copyOTP() {
+  const text = document.getElementById("otpCode").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
+}
 
 loadData();
 
