@@ -4,10 +4,58 @@
   <title>Payment Success</title>
 </head>
 
-<body style="font-family: Arial; text-align:center; padding:50px;">
+<body style="font-family: Arial; text-align:center; padding:40px;">
 
 <h2>✅ Payment Successful</h2>
-<p>Your OTP is being processed...</p>
+<p id="status">Processing your OTP...</p>
+
+<h3 id="otpBox" style="margin-top:20px; color:green;"></h3>
+
+<script>
+const API = "https://otp-backend-srw4.onrender.com";
+
+// Get data from URL (we will pass it later)
+const params = new URLSearchParams(window.location.search);
+const country = params.get("country");
+const service = params.get("service");
+
+async function getOTP() {
+  try {
+    const res = await fetch(`${API}/buy-number`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        country,
+        service
+      })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("status").innerText = "Waiting for OTP...";
+
+    // Poll for OTP
+    const id = data.id;
+
+    setInterval(async () => {
+      const check = await fetch(`${API}/check-sms?id=${id}`);
+      const sms = await check.json();
+
+      if (sms.code) {
+        document.getElementById("status").innerText = "OTP received:";
+        document.getElementById("otpBox").innerText = sms.code;
+      }
+    }, 5000);
+
+  } catch (err) {
+    document.getElementById("status").innerText = "Error getting OTP";
+  }
+}
+
+getOTP();
+</script>
 
 </body>
 </html>
