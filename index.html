@@ -266,12 +266,12 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
     const data = await res.json();
 
     // 🔥 Redirect to Korapay
-    window.location.href = data.data.checkout_url;
-
-  } catch (err) {
-    alert("Payment error");
-    console.log(err);
-  }
+    if (data && data.data && data.data.checkout_url) {
+  window.location.href = data.data.checkout_url;
+} else {
+  console.log(data);
+  alert("Payment error");
+}
 
 });
 
