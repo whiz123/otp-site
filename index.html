@@ -81,15 +81,6 @@
       color: #007bff;
     }
 
-    .result {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #0f172a;
-      color: white;
-      display: none;
-    }
-
     .mini-cards {
       display: flex;
       justify-content: space-between;
@@ -141,7 +132,7 @@
 
 <div class="topbar">
   <div class="scroll">
-    ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by 10,000+ users • 💬 24/7 Support Available
+    ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by users • 💬 24/7 Support
   </div>
 </div>
 
@@ -161,12 +152,10 @@
 
     <div id="priceBox" class="price">Price: Loading...</div>
 
-    <button id="buyBtn">Proceed to Payment</button>
-
-    <div id="resultBox" class="result"></div>
+    <button id="buyBtn">Pay & Get OTP</button>
 
     <div class="mini-cards">
-      <div class="mini">⚡ Fast Delivery</div>
+      <div class="mini">⚡ Fast</div>
       <div class="mini">🔒 Secure</div>
       <div class="mini">🌍 Global</div>
     </div>
@@ -174,7 +163,7 @@
   </div>
 
   <div class="trust">
-    Trusted by thousands of users
+    Secure checkout powered by Korapay
   </div>
 
 </div>
@@ -250,32 +239,39 @@ async function loadData() {
   serviceSelect.addEventListener("change", updatePrice);
 }
 
-// 🔥 FIXED BUY BUTTON (NO MORE CHEATING)
+// 🔥 KORAPAY PAYMENT FLOW
 document.getElementById("buyBtn").addEventListener("click", async () => {
 
   const country = document.getElementById("country").value;
   const service = document.getElementById("service").value;
   const email = document.getElementById("email").value;
-  const resultBox = document.getElementById("resultBox");
+  const amount = window.currentPrice;
 
   if (!email) return alert("Enter your email");
 
-  const baseAmount = window.currentPrice || 0;
+  try {
+    const res = await fetch(`${API}/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        amount,
+        country,
+        service
+      })
+    });
 
-  // 🔥 UNIQUE AMOUNT
-  const unique = Math.floor(Math.random() * 50) + 1;
-  const finalAmount = baseAmount + unique;
+    const data = await res.json();
 
-  resultBox.style.display = "block";
-  resultBox.innerHTML = `
-    💳 Send ₦<b>${finalAmount}</b><br><br>
-    Bank: Opay<br>
-    Name: YOUR NAME<br>
-    Account: 8123456789<br><br>
-    ⏳ Waiting for payment confirmation...
-  `;
+    // 🔥 Redirect to Korapay
+    window.location.href = data.data.checkout_url;
 
-  // ❌ NO BUY HERE ANYMORE
+  } catch (err) {
+    alert("Payment error");
+    console.log(err);
+  }
 
 });
 
