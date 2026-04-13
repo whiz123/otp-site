@@ -266,7 +266,7 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
       window.location.href = data.data.checkout_url;
     } else {
       console.log(data);
-      alert("Payment error");
+      alert(JSON.stringify(data));
     }
 
   } catch (err) {
