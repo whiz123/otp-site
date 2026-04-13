@@ -19,8 +19,9 @@ const country = localStorage.getItem("country");
 const service = localStorage.getItem("service");
 
 console.log(country, service);
+alert(country + " - " + service);
 
-async function getOTP() {
+  async function getOTP() {
   try {
     const res = await fetch(`${API}/buy-number`, {
       method: "POST",
