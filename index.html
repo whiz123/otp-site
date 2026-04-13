@@ -171,7 +171,6 @@
 <a href="https://t.me/payboostify_support" class="support">💬 Support</a>
 
 <script>
-
 const API = "https://otp-backend-srw4.onrender.com";
 
 function formatService(name) {
@@ -197,7 +196,6 @@ async function updatePrice() {
 
     priceBox.innerHTML = `Price: ₦<b>${data.price}</b>`;
     window.currentPrice = data.price;
-
   } catch {
     priceBox.innerText = "Error loading price";
   }
@@ -239,9 +237,8 @@ async function loadData() {
   serviceSelect.addEventListener("change", updatePrice);
 }
 
-// 🔥 KORAPAY PAYMENT FLOW
+// ✅ FIXED PAYMENT (THIS WAS YOUR BUG)
 document.getElementById("buyBtn").addEventListener("click", async () => {
-
   const country = document.getElementById("country").value;
   const service = document.getElementById("service").value;
   const email = document.getElementById("email").value;
@@ -265,18 +262,21 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
     const data = await res.json();
 
-    // 🔥 Redirect to Korapay
     if (data && data.data && data.data.checkout_url) {
-  window.location.href = data.data.checkout_url;
-} else {
-  console.log(data);
-  alert("Payment error");
-}
+      window.location.href = data.data.checkout_url;
+    } else {
+      console.log(data);
+      alert("Payment error");
+    }
 
+  } catch (err) {
+    console.log(err);
+    alert("Payment failed");
+  }
 });
 
+// ✅ VERY IMPORTANT
 loadData();
-
 </script>
 
 </body>
