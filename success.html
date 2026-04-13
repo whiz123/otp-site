@@ -16,12 +16,40 @@
 
 const API = "https://otp-backend-srw4.onrender.com";
 
+// 🔒 GET PAYMENT REFERENCE FROM URL
+const urlParams = new URLSearchParams(window.location.search);
+const reference = urlParams.get("reference");
+
+// ❌ BLOCK IF NO PAYMENT REFERENCE
+if (!reference) {
+  document.getElementById("status").innerText = "Invalid access ❌";
+  throw new Error("No payment reference");
+}
+
+// ❌ BLOCK MULTIPLE USAGE (ANTI REFRESH)
+if (localStorage.getItem("otp_used") === reference) {
+  document.getElementById("status").innerText = "OTP already used ❌";
+  throw new Error("Already used");
+}
+
 // get saved values
 const country = localStorage.getItem("country");
 const service = localStorage.getItem("service");
 
 async function getOTP() {
   try {
+
+    // 🔥 VERIFY PAYMENT FIRST
+    const verify = await fetch(`${API}/verify-payment?ref=${reference}`);
+    const verifyData = await verify.json();
+
+    if (!verifyData.success) {
+      document.getElementById("status").innerText = "Payment not completed ❌";
+      return;
+    }
+
+    // ✅ MARK THIS PAYMENT AS USED
+    localStorage.setItem("otp_used", reference);
 
     // BUY NUMBER
     const res = await fetch(`${API}/buy-number`, {
