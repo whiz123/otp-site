@@ -64,10 +64,11 @@
       font-size: 15px;
     }
 
+    /* 🔥 BUTTON CHANGED TO PREMIUM BLUE */
     button {
       width: 100%;
       padding: 16px;
-      background: linear-gradient(90deg, #00c853, #00a843);
+      background: linear-gradient(90deg, #007bff, #0056d2);
       border: none;
       color: white;
       font-size: 17px;
@@ -89,6 +90,24 @@
       background: #0f172a;
       color: white;
       display: none;
+    }
+
+    /* 🔥 SMALL TRUST CARDS (NOT BIG) */
+    .mini-cards {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      gap: 8px;
+    }
+
+    .mini {
+      flex: 1;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      text-align: center;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.06);
     }
 
     .trust {
@@ -150,10 +169,16 @@
 
     <div id="resultBox" class="result"></div>
 
+    <!-- 🔥 SMALL PREMIUM CARDS -->
+    <div class="mini-cards">
+      <div class="mini">⚡ Fast Delivery</div>
+      <div class="mini">🔒 Secure</div>
+      <div class="mini">🌍 Global</div>
+    </div>
+
   </div>
 
   <div class="trust">
-    🔒 Secure • ⚡ Instant • 🌍 Worldwide <br>
     Trusted by thousands of users
   </div>
 
