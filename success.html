@@ -47,16 +47,17 @@ document.getElementById("otpBox").innerText =
     const interval = setInterval(async () => {
       const check = await fetch(`${API}/check-sms?id=${id}`);
       const sms = await check.json();
-if (sms.code) {
+    if (sms.sms && sms.sms.length > 0) {
   clearInterval(interval);
+
+  const code = sms.sms[0].code;
 
   document.getElementById("status").innerText = "OTP received ✅";
 
   document.getElementById("otpBox").innerText =
     "📱 Number: " + data.phone +
-    "\n🎉 OTP: " + sms.code;
-}
-      
+    "\n🎉 OTP: " + code;
+}  
     }, 5000);
 
   } catch (err) {
