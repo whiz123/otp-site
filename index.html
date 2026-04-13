@@ -220,10 +220,8 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
     const buyData = await buyRes.json();
 
     if (!buyData.id) {
-  console.log("FULL ERROR:", buyData);
-
-  alert("❌ " + (buyData.message || "Failed to buy number"));
-
+  alert("❌ Failed: " + JSON.stringify(buyData));
+  console.log("BUY ERROR:", buyData);
   return;
 }
 
