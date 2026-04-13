@@ -15,9 +15,10 @@
 const API = "https://otp-backend-srw4.onrender.com";
 
 // Get data from URL (we will pass it later)
-const params = new URLSearchParams(window.location.search);
-const country = params.get("country");
-const service = params.get("service");
+const country = localStorage.getItem("country");
+const service = localStorage.getItem("service");
+
+console.log(country, service);
 
 async function getOTP() {
   try {
