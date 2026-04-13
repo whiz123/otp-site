@@ -200,16 +200,63 @@ async function loadData() {
   }
 }
 
-// BUY BUTTON
-document.getElementById("buyBtn").addEventListener("click", () => {
+document.getElementById("buyBtn").addEventListener("click", async () => {
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
   const email = document.getElementById("email").value;
 
   if (!email) {
-    alert("Please enter your email");
+    alert("Enter your email");
     return;
   }
 
-  alert("Next: payment integration 💰");
+  try {
+    alert("⏳ Buying number...");
+
+    const buyRes = await fetch(
+      `${API}/buy?country=${country}&service=${service}`
+    );
+
+    const buyData = await buyRes.json();
+
+    if (!buyData.id) {
+      alert("❌ Failed to buy number");
+      console.log(buyData);
+      return;
+    }
+
+    const orderId = buyData.id;
+    const phone = buyData.phone;
+
+    alert("✅ Number: " + phone);
+
+    let tries = 0;
+
+    const interval = setInterval(async () => {
+      tries++;
+
+      const checkRes = await fetch(`${API}/check?id=${orderId}`);
+      const checkData = await checkRes.json();
+
+      if (checkData.sms && checkData.sms.length > 0) {
+        clearInterval(interval);
+
+        const otp = checkData.sms[0].code;
+
+        alert("🎉 OTP: " + otp);
+      }
+
+      if (tries > 20) {
+        clearInterval(interval);
+        alert("⌛ No OTP received");
+      }
+
+    }, 5000);
+
+  } catch (err) {
+    console.log(err);
+    alert("Error buying number");
+  }
 });
 
 loadData();
