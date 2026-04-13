@@ -36,8 +36,11 @@ alert(country + " - " + service);
 
     const data = await res.json();
 
-    document.getElementById("status").innerText = "Waiting for OTP...";
+    // ✅ SHOW NUMBER IMMEDIATELY
+document.getElementById("status").innerText = "Number ready ✅";
 
+document.getElementById("otpBox").innerText =
+  "📱 Number: " + data.phone + "\n\n⏳ Waiting for OTP...";
     // Poll for OTP
     const id = data.id;
 
