@@ -44,14 +44,19 @@ document.getElementById("otpBox").innerText =
     // Poll for OTP
     const id = data.id;
 
-    setInterval(async () => {
+    const interval = setInterval(async () => {
       const check = await fetch(`${API}/check-sms?id=${id}`);
       const sms = await check.json();
+if (sms.code) {
+  clearInterval(interval);
 
-      if (sms.code) {
-        document.getElementById("status").innerText = "OTP received:";
-        document.getElementById("otpBox").innerText = sms.code;
-      }
+  document.getElementById("status").innerText = "OTP received ✅";
+
+  document.getElementById("otpBox").innerText =
+    "📱 Number: " + data.phone +
+    "\n🎉 OTP: " + sms.code;
+}
+      
     }, 5000);
 
   } catch (err) {
