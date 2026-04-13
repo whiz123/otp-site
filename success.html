@@ -16,6 +16,9 @@
 
 const API = "https://otp-backend-srw4.onrender.com";
 
+const urlParams = new URLSearchParams(window.location.search);
+const reference = urlParams.get("reference");
+
 // get saved values
 const country = localStorage.getItem("country");
 const service = localStorage.getItem("service");
@@ -30,9 +33,10 @@ async function getOTP() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        country,
-        service
-      })
+  country,
+  service,
+  reference
+})
     });
 
     const data = await res.json();
