@@ -52,8 +52,10 @@
       padding: 18px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      overflow: hidden; /* ✅ FIX */
     }
 
+    /* ✅ FIXED INPUT OVERFLOW */
     select, input {
       width: 100%;
       padding: 14px;
@@ -61,6 +63,7 @@
       border-radius: 10px;
       border: 1px solid #ddd;
       font-size: 15px;
+      box-sizing: border-box; /* 🔥 MAIN FIX */
     }
 
     button {
@@ -237,7 +240,6 @@ async function loadData() {
   serviceSelect.addEventListener("change", updatePrice);
 }
 
-// ✅ FIXED PAYMENT (THIS WAS YOUR BUG)
 document.getElementById("buyBtn").addEventListener("click", async () => {
   const country = document.getElementById("country").value;
   const service = document.getElementById("service").value;
@@ -275,7 +277,6 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
   }
 });
 
-// ✅ VERY IMPORTANT
 loadData();
 </script>
 
