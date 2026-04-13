@@ -12,7 +12,6 @@
       color: #111;
     }
 
-    /* 🔥 TOP SCROLL BAR */
     .topbar {
       background: linear-gradient(90deg, #007bff, #00c6ff);
       color: white;
@@ -64,7 +63,6 @@
       font-size: 15px;
     }
 
-    /* 🔥 BUTTON CHANGED TO PREMIUM BLUE */
     button {
       width: 100%;
       padding: 16px;
@@ -92,7 +90,6 @@
       display: none;
     }
 
-    /* 🔥 SMALL TRUST CARDS (NOT BIG) */
     .mini-cards {
       display: flex;
       justify-content: space-between;
@@ -117,7 +114,6 @@
       text-align: center;
     }
 
-    /* 🔥 TELEGRAM FLOAT */
     .support {
       position: fixed;
       bottom: 20px;
@@ -165,11 +161,10 @@
 
     <div id="priceBox" class="price">Price: Loading...</div>
 
-    <button id="buyBtn">Buy OTP</button>
+    <button id="buyBtn">Proceed to Payment</button>
 
     <div id="resultBox" class="result"></div>
 
-    <!-- 🔥 SMALL PREMIUM CARDS -->
     <div class="mini-cards">
       <div class="mini">⚡ Fast Delivery</div>
       <div class="mini">🔒 Secure</div>
@@ -184,7 +179,6 @@
 
 </div>
 
-<!-- TELEGRAM SUPPORT -->
 <a href="https://t.me/payboostify_support" class="support">💬 Support</a>
 
 <script>
@@ -208,13 +202,12 @@ async function updatePrice() {
 
   if (!country || !service) return;
 
-  priceBox.innerText = "Loading price...";
-
   try {
     const res = await fetch(`${API}/price?country=${country}&service=${service}`);
     const data = await res.json();
 
     priceBox.innerHTML = `Price: ₦<b>${data.price}</b>`;
+    window.currentPrice = data.price;
 
   } catch {
     priceBox.innerText = "Error loading price";
@@ -257,6 +250,7 @@ async function loadData() {
   serviceSelect.addEventListener("change", updatePrice);
 }
 
+// 🔥 FIXED BUY BUTTON (NO MORE CHEATING)
 document.getElementById("buyBtn").addEventListener("click", async () => {
 
   const country = document.getElementById("country").value;
@@ -266,41 +260,22 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
   if (!email) return alert("Enter your email");
 
+  const baseAmount = window.currentPrice || 0;
+
+  // 🔥 UNIQUE AMOUNT
+  const unique = Math.floor(Math.random() * 50) + 1;
+  const finalAmount = baseAmount + unique;
+
   resultBox.style.display = "block";
-  resultBox.innerHTML = "⏳ Buying number...";
+  resultBox.innerHTML = `
+    💳 Send ₦<b>${finalAmount}</b><br><br>
+    Bank: Opay<br>
+    Name: YOUR NAME<br>
+    Account: 8123456789<br><br>
+    ⏳ Waiting for payment confirmation...
+  `;
 
-  const buyRes = await fetch(`${API}/buy?country=${country}&service=${service}`);
-  const buyData = await buyRes.json();
-
-  if (!buyData.id) {
-    resultBox.innerHTML = "❌ Failed: " + JSON.stringify(buyData);
-    return;
-  }
-
-  resultBox.innerHTML = `📱 Number: ${buyData.phone}<br>⏳ Waiting for OTP...`;
-
-  const orderId = buyData.id;
-
-  let tries = 0;
-
-  const interval = setInterval(async () => {
-
-    tries++;
-
-    const checkRes = await fetch(`${API}/check?id=${orderId}`);
-    const checkData = await checkRes.json();
-
-    if (checkData.sms && checkData.sms.length > 0) {
-      clearInterval(interval);
-      resultBox.innerHTML += `<br>🎉 OTP: <b>${checkData.sms[0].code}</b>`;
-    }
-
-    if (tries > 20) {
-      clearInterval(interval);
-      resultBox.innerHTML += "<br>⌛ No OTP received";
-    }
-
-  }, 5000);
+  // ❌ NO BUY HERE ANYMORE
 
 });
 
