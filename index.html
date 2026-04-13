@@ -5,116 +5,139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
     body {
       margin: 0;
-      background: #020617;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111;
+    }
+
+    /* 🔥 TOP SCROLL BAR */
+    .topbar {
+      background: linear-gradient(90deg, #007bff, #00c6ff);
       color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      padding: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .scroll {
+      display: inline-block;
+      animation: scrollText 12s linear infinite;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
     }
 
     .container {
-      width: 100%;
       max-width: 420px;
+      margin: auto;
       padding: 20px;
-    }
-
-    .card {
-      background: #0f172a;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 26px;
       margin-bottom: 5px;
     }
 
     .subtitle {
-      font-size: 13px;
-      color: #94a3b8;
+      font-size: 14px;
+      color: #555;
       margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
 
     select, input {
       width: 100%;
       padding: 14px;
-      margin-top: 10px;
+      margin: 8px 0;
       border-radius: 10px;
-      border: 1px solid #1e293b;
-      background: #020617;
-      color: white;
+      border: 1px solid #ddd;
       font-size: 15px;
     }
 
     button {
       width: 100%;
-      padding: 15px;
-      margin-top: 15px;
+      padding: 16px;
+      background: linear-gradient(90deg, #00c853, #00a843);
       border: none;
-      border-radius: 10px;
-      background: #22c55e;
       color: white;
-      font-size: 16px;
+      font-size: 17px;
+      border-radius: 10px;
       cursor: pointer;
-      font-weight: bold;
     }
 
     .price {
-      margin-top: 15px;
-      font-size: 15px;
-      color: #38bdf8;
+      margin: 10px 0;
+      font-weight: bold;
+      font-size: 16px;
+      color: #007bff;
     }
 
     .result {
-      margin-top: 20px;
+      margin-top: 15px;
       padding: 15px;
       border-radius: 12px;
-      background: #020617;
+      background: #0f172a;
+      color: white;
       display: none;
     }
 
-    .result h3 {
-      margin: 5px 0;
-    }
-
-    .otp {
-      font-size: 26px;
-      color: #22c55e;
-      font-weight: bold;
-    }
-
-    .copy-btn {
-      margin-top: 10px;
-      background: #334155;
-    }
-
-    .footer {
+    .trust {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #555;
       text-align: center;
-      margin-top: 15px;
-      font-size: 12px;
-      color: #64748b;
     }
+
+    /* 🔥 TELEGRAM FLOAT */
+    .support {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0088cc;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 14px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
   </style>
 </head>
 
 <body>
 
-<div class="container">
-  <div class="card">
+<div class="topbar">
+  <div class="scroll">
+    ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by 10,000+ users • 💬 24/7 Support Available
+  </div>
+</div>
 
-    <h1>OTP Service 📱</h1>
-    <div class="subtitle">
-      Instant verification • Global numbers • Real-time OTP
-    </div>
+<div class="container">
+
+  <h1>OTP Service 📱</h1>
+  <div class="subtitle">
+    Buy virtual numbers instantly and receive OTP in seconds
+  </div>
+
+  <div class="card">
 
     <select id="country"></select>
     <select id="service"></select>
@@ -127,12 +150,17 @@
 
     <div id="resultBox" class="result"></div>
 
-    <div class="footer">
-      🔒 Secure • ⚡ Instant • 🌍 Worldwide
-    </div>
-
   </div>
+
+  <div class="trust">
+    🔒 Secure • ⚡ Instant • 🌍 Worldwide <br>
+    Trusted by thousands of users
+  </div>
+
 </div>
+
+<!-- TELEGRAM SUPPORT -->
+<a href="https://t.me/payboostify_support" class="support">💬 Support</a>
 
 <script>
 
@@ -145,15 +173,13 @@ function formatService(name) {
     .replace("facebook", "Facebook")
     .replace("instagram", "Instagram")
     .replace("twitter", "Twitter")
-    .replace("tiktok", "TikTok")
-    .replace("googlevoice", "Google Voice")
-    .replace("youtube", "YouTube")
-    .replace("google", "Google");
+    .replace("tiktok", "TikTok");
 }
 
 async function updatePrice() {
-  const country = country.value;
-  const service = service.value;
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
+  const priceBox = document.getElementById("priceBox");
 
   if (!country || !service) return;
 
@@ -163,34 +189,38 @@ async function updatePrice() {
     const res = await fetch(`${API}/price?country=${country}&service=${service}`);
     const data = await res.json();
 
-    priceBox.innerText = "Price: ₦" + data.price;
+    priceBox.innerHTML = `Price: ₦<b>${data.price}</b>`;
+
   } catch {
     priceBox.innerText = "Error loading price";
   }
 }
 
 async function loadData() {
+  const countrySelect = document.getElementById("country");
+  const serviceSelect = document.getElementById("service");
+
   const countries = await fetch(API + "/countries").then(r => r.json());
 
-  country.innerHTML = "";
   countries.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.text = c.toUpperCase();
-    country.appendChild(opt);
+    const option = document.createElement("option");
+    option.value = c;
+    option.text = c.toUpperCase();
+    countrySelect.appendChild(option);
   });
 
   async function loadServices() {
-    service.innerHTML = "<option>Loading...</option>";
+    const country = countrySelect.value;
 
-    const services = await fetch(`${API}/services?country=${country.value}`).then(r => r.json());
+    const services = await fetch(`${API}/services?country=${country}`).then(r => r.json());
 
-    service.innerHTML = "";
+    serviceSelect.innerHTML = "";
+
     services.forEach(s => {
-      const opt = document.createElement("option");
-      opt.value = s;
-      opt.text = formatService(s);
-      service.appendChild(opt);
+      const option = document.createElement("option");
+      option.value = s;
+      option.text = formatService(s);
+      serviceSelect.appendChild(option);
     });
 
     updatePrice();
@@ -198,76 +228,56 @@ async function loadData() {
 
   await loadServices();
 
-  country.addEventListener("change", loadServices);
-  service.addEventListener("change", updatePrice);
+  countrySelect.addEventListener("change", loadServices);
+  serviceSelect.addEventListener("change", updatePrice);
 }
 
 document.getElementById("buyBtn").addEventListener("click", async () => {
-  if (!email.value) {
-    alert("Enter email");
-    return;
-  }
+
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
+  const email = document.getElementById("email").value;
+  const resultBox = document.getElementById("resultBox");
+
+  if (!email) return alert("Enter your email");
 
   resultBox.style.display = "block";
   resultBox.innerHTML = "⏳ Buying number...";
 
-  try {
-    const res = await fetch(`${API}/buy?country=${country.value}&service=${service.value}`);
-    const data = await res.json();
+  const buyRes = await fetch(`${API}/buy?country=${country}&service=${service}`);
+  const buyData = await buyRes.json();
 
-    if (!data.id) {
-      resultBox.innerHTML = "❌ Failed: " + JSON.stringify(data);
-      return;
+  if (!buyData.id) {
+    resultBox.innerHTML = "❌ Failed: " + JSON.stringify(buyData);
+    return;
+  }
+
+  resultBox.innerHTML = `📱 Number: ${buyData.phone}<br>⏳ Waiting for OTP...`;
+
+  const orderId = buyData.id;
+
+  let tries = 0;
+
+  const interval = setInterval(async () => {
+
+    tries++;
+
+    const checkRes = await fetch(`${API}/check?id=${orderId}`);
+    const checkData = await checkRes.json();
+
+    if (checkData.sms && checkData.sms.length > 0) {
+      clearInterval(interval);
+      resultBox.innerHTML += `<br>🎉 OTP: <b>${checkData.sms[0].code}</b>`;
     }
 
-    const phone = data.phone;
-    const id = data.id;
+    if (tries > 20) {
+      clearInterval(interval);
+      resultBox.innerHTML += "<br>⌛ No OTP received";
+    }
 
-    resultBox.innerHTML = `
-      <p>📱 Number:</p>
-      <h3>${phone}</h3>
-      <p>⏳ Waiting for OTP...</p>
-    `;
+  }, 5000);
 
-    let tries = 0;
-
-    const interval = setInterval(async () => {
-      tries++;
-
-      const check = await fetch(`${API}/check?id=${id}`);
-      const checkData = await check.json();
-
-      if (checkData.sms && checkData.sms.length > 0) {
-        clearInterval(interval);
-
-        const otp = checkData.sms[0].code;
-
-        resultBox.innerHTML = `
-          <p>📱 Number:</p>
-          <h3>${phone}</h3>
-          <p>🔐 OTP:</p>
-          <div class="otp" id="otpCode">${otp}</div>
-          <button class="copy-btn" onclick="copyOTP()">Copy OTP</button>
-        `;
-      }
-
-      if (tries > 20) {
-        clearInterval(interval);
-        resultBox.innerHTML += "<p>⌛ No OTP received</p>";
-      }
-
-    }, 5000);
-
-  } catch {
-    resultBox.innerHTML = "❌ Error buying number";
-  }
 });
-
-function copyOTP() {
-  const text = document.getElementById("otpCode").innerText;
-  navigator.clipboard.writeText(text);
-  alert("Copied!");
-}
 
 loadData();
 
