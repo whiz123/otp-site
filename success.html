@@ -7,7 +7,7 @@
 
 <body style="font-family: Arial; text-align: center; padding: 30px;">
 
- <h2>Payment Successful</h2>
+ <h2 id="title">Checking payment...</h2>
 <p id="status">Initializing...</p>
 <h3 id="otpBox" style="margin-top:20px; color:green;"></h3> 
 
@@ -18,7 +18,14 @@ const API = "https://otp-backend-srw4.onrender.com";
 
 const urlParams = new URLSearchParams(window.location.search);
 const reference = urlParams.get("reference");
-
+// ✅ VERIFY PAYMENT BEFORE ANYTHING
+if (!reference || reference === "null") {
+  document.getElementById("title").innerText = "Payment Failed ❌";
+  document.getElementById("status").innerText = "Invalid or cancelled payment.";
+} else {
+  document.getElementById("title").innerText = "Payment Successful";
+}
+  
 // get saved values
 const country = localStorage.getItem("country");
 const service = localStorage.getItem("service");
@@ -76,7 +83,7 @@ async function getOTP() {
 
       }
 
-    }, 5000);
+    }, 2000);
 
   } catch (err) {
     document.getElementById("status").innerText = "Error getting OTP";
