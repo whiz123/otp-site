@@ -344,27 +344,31 @@ z-index:9999;
 
   <div style="
   background:white;
-  padding:25px;
+  padding:20px;
   border-radius:12px;
   width:90%;
-  max-width:350px;
+  max-width:340px;
   text-align:center;
   ">
 
-    <h3>Continue with Email</h3>
+    <h3 style="margin-bottom:8px;">Continue</h3>
+
+    <p style="font-size:13px; color:#666; margin-bottom:15px;">
+      Enter your email (no signup required)
+    </p>
 
     <input type="email" id="popupEmail"
     placeholder="Enter your email"
-    style="width:100%; padding:12px; margin-top:10px; border-radius:8px; border:1px solid #ddd;" />
+    style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd;" />
 
     <button onclick="saveEmail()"
-    style="margin-top:15px; width:100%; padding:12px; background:#007bff; color:white; border:none; border-radius:8px;">
+    style="margin-top:15px; width:100%; padding:12px; background:#007bff; color:white; border:none; border-radius:8px; font-weight:600;">
       Continue
     </button>
 
     <button onclick="skipEmail()"
-    style="margin-top:10px; width:100%; padding:10px; background:#eee; border:none; border-radius:8px;">
-      Skip
+    style="margin-top:10px; width:100%; padding:10px; background:transparent; border:none; color:#666; font-size:14px;">
+      Continue without email
     </button>
 
   </div>
