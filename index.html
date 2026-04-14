@@ -205,6 +205,22 @@
       ₦<span id="balance">0.00</span>
     </div>
 
+  <!-- BALANCE + BUTTON ROW -->
+<div style="
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+">
+
+  <!-- BALANCE -->
+  <div id="balanceAmount" style="
+    font-size:26px;
+    font-weight:bold;
+  ">
+    ₦<span id="balance">0.00</span>
+  </div>
+
   <!-- RIGHT SIDE BUTTON -->
   <button onclick="fundWallet()" style="
     background:white;
@@ -219,11 +235,13 @@
     + Fund
   </button>
 
-</div>  
+</div>
 
-</div>  
+<!-- CLOSE BLUE CARD -->
+</div>
 
-  <div class="card">
+<!-- NEXT SECTION -->
+<div class="card">
 
     <select id="country"></select>
     <select id="service"></select>
