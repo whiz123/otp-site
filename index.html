@@ -174,26 +174,47 @@
   </div>
 
   <div style="
+  background:#2d6cdf;
+  border-radius:16px;
+  padding:18px;
+  color:white;
+  margin-bottom:20px;
+">
+
+  <!-- TOP ROW -->
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:14px;
+    opacity:0.9;
+  ">
+    <div>
+      Available Balance 👁
+    </div>
+
+    <button onclick="fundWallet()" style="
+      background:white;
+      color:#2d6cdf;
+      border:none;
+      padding:6px 12px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:600;
+    ">
+      + Fund Wallet
+    </button>
+  </div>
+
+  <!-- BALANCE -->
+  <div id="balanceAmount" style="
     font-size:28px;
     font-weight:bold;
-    color:#2d6cdf;
-    margin-top:5px;
+    margin-top:10px;
   ">
     ₦<span id="balance">0.00</span>
   </div>
 
-   <!-- ✅ ADD THIS BUTTON HERE -->
-<button onclick="fundWallet()" style="
-  margin-top:10px;
-  padding:10px 15px;
-  background:#2ecc71;
-  color:white;
-  border:none;
-  border-radius:8px;
-  font-size:14px;
-">
-  + Fund Wallet
-</button> 
 </div>
   
   <div class="card">
@@ -227,6 +248,20 @@
 function fundWallet() {
   alert("Fund wallet coming next");
 }
+
+ let balanceVisible = true;
+
+function toggleBalance() {
+  const el = document.getElementById("balanceAmount");
+
+  if (balanceVisible) {
+    el.innerHTML = "₦ ****";
+  } else {
+    el.innerHTML = "₦" + document.getElementById("balance").innerText;
+  }
+
+  balanceVisible = !balanceVisible;
+} 
   
  function saveSelection(country, service) {
   localStorage.setItem("country", country);
