@@ -201,7 +201,10 @@ async function updatePrice() {
     const res = await fetch(`${API}/price?country=${country}&service=${service}`);
     const data = await res.json();
 
-    priceBox.innerHTML = `Price: ₦<b>${data.price}</b>`;
+    priceBox.innerHTML = `
+💰 From ₦1,500 – ₦6,500<br>
+<strong>Price: ₦${data.price}</strong>
+`;
     window.currentPrice = data.price;
   } catch {
     priceBox.innerText = "Error loading price";
