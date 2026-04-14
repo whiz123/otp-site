@@ -16,6 +16,24 @@
 
 const API = "https://otp-backend-srw4.onrender.com";
 
+ // 🔥 SAVE ORDER FUNCTION (PASTE HERE)
+function saveOrder(data) {
+  const email = localStorage.getItem("user_email") || "guest";
+
+  let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
+
+  orders.unshift({
+    id: Date.now(),
+    number: data.number,
+    service: data.service,
+    country: data.country,
+    status: "waiting",
+    otp: null,
+    retry_used: false
+  });
+
+  localStorage.setItem("orders_" + email, JSON.stringify(orders));
+} 
 const urlParams = new URLSearchParams(window.location.search);
 const reference = urlParams.get("reference");
 // ✅ VERIFY PAYMENT BEFORE ANYTHING
@@ -82,8 +100,17 @@ async function getOTP() {
 
     const id = data.id;
 
+    // 🔥 SAVE ORDER HERE (ONCE)
+
+saveOrder({
+  number: data.phone,
+  service: "WhatsApp", // or your selected service
+  country: "USA" // or your selected country
+});
+
+const interval = setInterval(async () => {
+
     // 🔁 CHECK FOR OTP
-    const interval = setInterval(async () => {
 
       const check = await fetch(`${API}/check?id=${id}`);
       const sms = await check.json();
@@ -94,6 +121,17 @@ async function getOTP() {
         clearInterval(interval);
 
         const code = sms.sms[0].code;
+
+        // 🔥 UPDATE ORDER TO SUCCESS
+const email = localStorage.getItem("user_email") || "guest";
+let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
+
+if (orders.length > 0) {
+  orders[0].status = "success";
+  orders[0].otp = code;
+}
+
+localStorage.setItem("orders_" + email, JSON.stringify(orders));
 
         document.getElementById("status").innerText = "OTP received ✅";
 
