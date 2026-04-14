@@ -19,11 +19,31 @@ const API = "https://otp-backend-srw4.onrender.com";
 const urlParams = new URLSearchParams(window.location.search);
 const reference = urlParams.get("reference");
 // ✅ VERIFY PAYMENT BEFORE ANYTHING
-if (!reference || reference === "null") {
-  document.getElementById("title").innerText = "Payment Failed ❌";
-  document.getElementById("status").innerText = "Invalid or cancelled payment.";
-} else {
-  document.getElementById("title").innerText = "Payment Successful";
+async function verifyPayment() {
+  if (!reference || reference === "null") {
+    document.getElementById("title").innerText = "Payment Failed ❌";
+    document.getElementById("status").innerText = "No valid transaction.";
+    return false;
+  }
+
+  try {
+    const res = await fetch(`${API}/verify?reference=${reference}`);
+    const data = await res.json();
+
+    if (!data.success) {
+      document.getElementById("title").innerText = "Payment Failed ❌";
+      document.getElementById("status").innerText = "Payment not completed.";
+      return false;
+    }
+
+    document.getElementById("title").innerText = "Payment Successful";
+    return true;
+
+  } catch (err) {
+    document.getElementById("title").innerText = "Error ❌";
+    document.getElementById("status").innerText = "Verification failed.";
+    return false;
+  }
 }
   
 // get saved values
@@ -91,7 +111,11 @@ async function getOTP() {
 }
 
 // run immediately
-getOTP();
+verifyPayment().then(ok => {
+  if (ok) {
+    getOTP();
+  }
+});
 
 </script>
 
