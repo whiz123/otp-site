@@ -172,39 +172,51 @@
 
   <!-- TOP TEXT -->
   <div onclick="toggleBalance()" style="
-    font-size:14px;
-    opacity:0.9;
-    cursor:pointer;
-  ">
-    Available Balance 👁
-  </div>
+  font-size:14px;
+  opacity:0.9;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+">
+
+  <span>Available Balance</span>
+
+  <!-- ICON -->
+  <span id="eyeIcon" style="font-size:14px;">
+    ••••
+  </span>
+
+</div>
+
+  <div style="
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:10px;
+">
 
   <!-- BALANCE -->
   <div id="balanceAmount" style="
     font-size:28px;
     font-weight:bold;
-    margin-top:8px;
   ">
     ₦<span id="balance">0.00</span>
   </div>
 
-  <!-- BUTTON RIGHT (OPAY STYLE) -->
-  <div style="
-  display:flex;
-  justify-content:flex-end;
-  margin-top:10px;
-">
+  <!-- SMALL BUTTON -->
   <button onclick="fundWallet()" style="
     background:white;
     color:#2d6cdf;
     border:none;
-    padding:5px 12px;
+    padding:6px 12px;
     border-radius:20px;
     font-size:12px;
     font-weight:600;
   ">
     + Fund
   </button>
+
 </div>
 
 </div>
@@ -534,5 +546,25 @@ display:none;
 z-index:9998;
 "></div>
 
+<script>
+let isHidden = false;
+let realBalance = "0.00";
+
+function toggleBalance() {
+  const balance = document.getElementById("balance");
+  const eye = document.getElementById("eyeIcon");
+
+  if (!isHidden) {
+    balance.innerText = "****";
+    eye.innerText = "••••";
+    isHidden = true;
+  } else {
+    balance.innerText = realBalance;
+    eye.innerText = "••";
+    isHidden = false;
+  }
+}
+</script>
+  
 </body>
 </html>
