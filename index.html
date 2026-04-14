@@ -133,6 +133,14 @@
 
 <body>
 
+ <!-- ☰ MENU BUTTON -->
+<div style="position:fixed; top:10px; left:10px; z-index:10000;">
+  <button onclick="openMenu()" style="
+    font-size:22px;
+    background:none;
+    border:none;
+  ">☰</button>
+</div> 
 <div class="topbar">
   <div class="scroll">
     ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by 10,000+ users • 💬 24/7 Support
@@ -329,6 +337,28 @@ function skipEmail() {
 }
   
 loadData();
+
+ function openMenu() {
+  document.getElementById("sideMenu").style.left = "0";
+  document.getElementById("overlay").style.display = "block";
+
+  // load email
+  const email = localStorage.getItem("user_email") || "Guest";
+  document.getElementById("userEmail").innerText = "📧 " + email;
+}
+
+function closeMenu() {
+  document.getElementById("sideMenu").style.left = "-260px";
+  document.getElementById("overlay").style.display = "none";
+}
+
+function goOrders() {
+  window.location.href = "orders.html";
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}  
 </script>
 
  <!-- 🔥 EMAIL POPUP -->
@@ -374,5 +404,48 @@ z-index:9999;
 
   </div>
 </div> 
+
+  </script>
+
+<!-- 🔥 SIDE MENU -->
+<div id="sideMenu" style="
+position: fixed;
+top:0;
+left:-260px;
+width:260px;
+height:100%;
+background:white;
+box-shadow:2px 0 10px rgba(0,0,0,0.1);
+transition:0.3s;
+z-index:9999;
+padding:20px;
+">
+
+  <div style="margin-bottom:20px;">
+    <div id="userEmail" style="font-weight:bold;">📧 Loading...</div>
+    <div style="margin-top:5px; color:#555;">💰 Pay per order</div>
+  </div>
+
+  <hr>
+
+  <div onclick="goHome()" style="margin:15px 0;">🏠 New Order</div>
+  <div onclick="goOrders()" style="margin:15px 0;">📦 My Orders</div>
+  <div style="margin:15px 0;">❓ Support</div>
+  <div style="margin:15px 0;">🎓 Tutorial</div>
+
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeMenu()" style="
+position: fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+display:none;
+z-index:9998;
+"></div>
+
 </body>
 </html>
