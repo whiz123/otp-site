@@ -138,12 +138,15 @@
 
   <!-- ☰ MENU BUTTON -->
   <button onclick="openMenu()" style="
-    font-size:22px;
-    background:transparent;
-    border:none;
-    color:white;
-    margin-right:10px;
-  ">☰</button>
+  font-size:26px;
+  background:rgba(255,255,255,0.15);
+  border:none;
+  color:white;
+  padding:8px 12px;
+  border-radius:8px;
+">
+  ☰
+</button>
 
   <div class="scroll">
     ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by 10,000+ users • 💬 24/7 Support
@@ -352,7 +355,7 @@ loadData();
 }
 
 function closeMenu() {
-  document.getElementById("sideMenu").style.left = "-240px";
+  document.getElementById("sideMenu").style.left = "-280px";
   document.getElementById("overlay").style.display = "none";
 }
 
@@ -415,11 +418,11 @@ z-index:9999;
 <div id="sideMenu" style="
 position: fixed;
 top:0;
-left:-260px;
+left:-280px;
 width:220px;
 height:100%;
 background:#fff;
-box-shadow:2px 0 8px rgba(0,0,0,0.08);
+box-shadow:none;
 transition:0.3s;
 z-index:9999;
 padding:18px;
