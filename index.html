@@ -161,71 +161,30 @@
     Buy virtual numbers instantly and receive OTP in seconds
   </div>
 
-  
   <div style="
-  background:#2d6cdf;
+  background:#fff;
   border-radius:16px;
-  padding:18px;
-  color:white;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
   margin-bottom:20px;
 ">
 
-  <!-- TOP TEXT -->
-  <div onclick="toggleBalance()" style="
-  font-size:14px;
-  opacity:0.9;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-">
+  <div style="font-size:14px; color:#666;">
+    Current Balance
+  </div>
 
-  <span>Available Balance</span>
-
-  <!-- CLEAN ICON TEXT -->
-  <span id="eyeIcon" style="font-size:12px;">
-    hide
-  </span>
-
-</div>
-
-  <!-- BALANCE + BUTTON ROW -->
-<div style="
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:10px;
-">
-
-  <!-- BALANCE -->
-  <div id="balanceAmount" style="
-    font-size:26px;
+  <div style="
+    font-size:28px;
     font-weight:bold;
+    color:#2d6cdf;
+    margin-top:5px;
   ">
     ₦<span id="balance">0.00</span>
   </div>
 
-  <!-- RIGHT SIDE BUTTON -->
-  <button onclick="fundWallet()" style="
-    background:white;
-    color:#2d6cdf;
-    border:none;
-    padding:6px 14px;
-    border-radius:20px;
-    font-size:12px;
-    font-weight:600;
-    height:32px;
-  ">
-    + Fund
-  </button>
-
 </div>
-
-<!-- CLOSE BLUE CARD -->
-</div>
-
-<!-- NEXT SECTION -->
-<div class="card">
+  
+  <div class="card">
 
     <select id="country"></select>
     <select id="service"></select>
@@ -253,34 +212,6 @@
 <a href="https://t.me/payboostify_support" class="support">💬 Support</a>
 
 <script>
-function fundWallet() {
-  alert("Fund wallet coming next");
-}
-
- <script>
-function fundWallet() {
-  alert("Fund wallet coming next");
-}
-
-let isHidden = false;
-let realBalance = "0.00";
-
-function toggleBalance() {
-  const balance = document.getElementById("balance");
-  const eye = document.getElementById("eyeIcon");
-
-  if (!isHidden) {
-    balance.innerText = "****";
-    eye.innerText = "show";
-    isHidden = true;
-  } else {
-    balance.innerText = realBalance;
-    eye.innerText = "hide";
-    isHidden = false;
-  }
-}
-</script>
-  
  function saveSelection(country, service) {
   localStorage.setItem("country", country);
   localStorage.setItem("service", service);
@@ -560,25 +491,5 @@ display:none;
 z-index:9998;
 "></div>
 
-<script>
-let isHidden = false;
-let realBalance = "0.00";
-
-function toggleBalance() {
-  const balance = document.getElementById("balance");
-  const eye = document.getElementById("eyeIcon");
-
-  if (!isHidden) {
-    balance.innerText = "****";
-    eye.innerText = "••••";
-    isHidden = true;
-  } else {
-    balance.innerText = realBalance;
-    eye.innerText = "••";
-    isHidden = false;
-  }
-}
-</script>
-  
 </body>
 </html>
