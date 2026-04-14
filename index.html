@@ -202,8 +202,12 @@ async function updatePrice() {
     const data = await res.json();
 
     priceBox.innerHTML = `
-💰 From ₦1,500 – ₦6,500<br>
-<strong>Price: ₦${data.price}</strong>
+<span style="color:#888;font-size:14px;">
+From ₦1,500 – ₦6,500 depending on country
+</span><br>
+<strong style="font-size:18px;">
+₦${data.price}
+</strong>
 `;
     window.currentPrice = data.price;
   } catch {
