@@ -7,25 +7,13 @@
 
 <body style="font-family: Arial; text-align: center; padding: 30px;">
 
-  <h2>✅ Payment Confirmed</h2>
+ <h2>Payment Successful</h2>
+<p id="status">Initializing...</p>
+<h3 id="otpBox" style="margin-top:20px; color:green;"></h3> 
 
-<p id="status">Initializing your number...</p>
-
-<h3 id="otpBox" style="margin-top:20px; color:green;"></h3>
-<button onclick="copyNumber()" style="margin-top:10px; padding:10px 15px; border:none; background:#0a7cff; color:white; border-radius:6px; cursor:pointer;">
-📋 Copy Number
-</button>
-<p>📩 Please use the assigned number below to complete your verification.</p>
-<p>⏳ Waiting for incoming OTP. This may take a few seconds...</p>
 
 <script>
-function copyNumber() {
-  const text = document.getElementById("otpBox").innerText;
 
-  navigator.clipboard.writeText(text);
-
-  document.getElementById("status").innerText = "✅ Number copied";
-}
 const API = "https://otp-backend-srw4.onrender.com";
 
 const urlParams = new URLSearchParams(window.location.search);
