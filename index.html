@@ -177,49 +177,49 @@
   cursor:pointer;
   display:flex;
   align-items:center;
-  gap:6px;
+  justify-content:space-between;
 ">
 
   <span>Available Balance</span>
 
-  <!-- ICON -->
-  <span id="eyeIcon" style="font-size:14px;">
-    ••••
+  <!-- CLEAN ICON TEXT -->
+  <span id="eyeIcon" style="font-size:12px;">
+    hide
   </span>
 
 </div>
 
-  <div style="
+<div style="
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-top:10px;
 ">
 
-  <!-- BALANCE -->
-  <div id="balanceAmount" style="
-    font-size:28px;
-    font-weight:bold;
-  ">
-    ₦<span id="balance">0.00</span>
-  </div>
+  <!-- LEFT SIDE -->
+  <div>
+    <div id="balanceAmount" style="
+      font-size:26px;
+      font-weight:bold;
+    ">
+      ₦<span id="balance">0.00</span>
+    </div>
 
-  <!-- SMALL BUTTON -->
+  <!-- RIGHT SIDE BUTTON -->
   <button onclick="fundWallet()" style="
     background:white;
     color:#2d6cdf;
     border:none;
-    padding:6px 12px;
+    padding:6px 14px;
     border-radius:20px;
     font-size:12px;
     font-weight:600;
+    height:32px;
   ">
     + Fund
   </button>
 
-</div>
-
-</div>
+</div>  
   
   <div class="card">
 
@@ -253,19 +253,29 @@ function fundWallet() {
   alert("Fund wallet coming next");
 }
 
- let balanceVisible = true;
+ <script>
+function fundWallet() {
+  alert("Fund wallet coming next");
+}
+
+let isHidden = false;
+let realBalance = "0.00";
 
 function toggleBalance() {
-  const el = document.getElementById("balanceAmount");
+  const balance = document.getElementById("balance");
+  const eye = document.getElementById("eyeIcon");
 
-  if (balanceVisible) {
-    el.innerHTML = "₦ ****";
+  if (!isHidden) {
+    balance.innerText = "****";
+    eye.innerText = "show";
+    isHidden = true;
   } else {
-    el.innerHTML = "₦" + document.getElementById("balance").innerText;
+    balance.innerText = realBalance;
+    eye.innerText = "hide";
+    isHidden = false;
   }
-
-  balanceVisible = !balanceVisible;
-} 
+}
+</script>
   
  function saveSelection(country, service) {
   localStorage.setItem("country", country);
