@@ -181,32 +181,48 @@
   margin-bottom:20px;
 ">
 
-  <!-- TOP ROW -->
+  <!-- TOP TEXT -->
+  <div onclick="toggleBalance()" style="
+    font-size:14px;
+    opacity:0.9;
+    cursor:pointer;
+  ">
+    Available Balance 👁
+  </div>
+
+  <!-- BALANCE + BUTTON ROW -->
   <div style="
     display:flex;
     justify-content:space-between;
     align-items:center;
+    margin-top:8px;
   ">
 
-    <div onclick="toggleBalance()" style="
-      font-size:14px;
-      cursor:pointer;
-      opacity:0.9;
+    <!-- BALANCE -->
+    <div id="balanceAmount" style="
+      font-size:26px;
+      font-weight:bold;
     ">
-      Available Balance 👁
+      ₦<span id="balance">0.00</span>
     </div>
 
+    <!-- SMALL OPAY STYLE BUTTON -->
     <button onclick="fundWallet()" style="
       background:white;
       color:#2d6cdf;
       border:none;
-      padding:5px 10px;
-      border-radius:15px;
+      padding:6px 14px;
+      border-radius:20px;
       font-size:12px;
       font-weight:600;
+      white-space:nowrap;
     ">
       + Fund
     </button>
+
+  </div>
+
+</div>
 
   </div>
 
