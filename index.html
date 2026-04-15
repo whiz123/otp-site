@@ -203,7 +203,7 @@
 
     <div id="priceBox" class="price">Price: Loading...</div>
 
-    <button id="buyBtn">Pay & Get OTP</button>
+    <button id="payBtn">Pay & Get OTP</button>
 
     <div class="mini-cards">
       <div class="mini">⚡ Fast</div>
@@ -574,6 +574,12 @@ z-index:9998;
 function fundWallet() {
   alert("Funding coming soon");
 }
+</script>
+
+<script>
+document.getElementById("payBtn").onclick = function () {
+  buyOTP();
+};
 </script>
   
 </body>
