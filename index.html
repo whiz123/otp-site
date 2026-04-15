@@ -307,35 +307,26 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
   if (!email) return alert("Enter your email");
 
-  try {
-    const res = await fetch(`${API}/create-payment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        amount,
-        country,
-        service
-      })
-    });
-
-    const data = await res.json();
-
-    if (data && data.data && data.data.checkout_url) {
-      saveSelection(country, service);
-      window.location.href = data.data.checkout_url;
-    } else {
-      console.log(data);
-      alert(JSON.stringify(data));
-    }
-
-  } catch (err) {
-    console.log(err);
-    alert("Payment failed");
-  }
+  const res = await fetch("https://otp-backend.onrender.com/buy-otp", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email,
+    country,
+    service
+  })
 });
+
+const data = await res.json();
+
+if (!data.status) {
+  return alert(data.message);
+}
+
+showOTPResult(data.number, service);
+checkOTP(data.order_id);
 
 // 🔥 EMAIL SYSTEM (FIXED)
 
