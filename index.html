@@ -169,9 +169,12 @@
   margin-bottom:20px;
 ">
 
-  <div style="font-size:14px; color:#666;">
-    Current Balance
-  </div>
+  <div style="display:flex; justify-content:space-between; font-size:14px; color:#666;">
+  <span>Current Balance</span>
+  <span onclick="fundWallet()" style="font-size:12px; color:#2d6cdf; cursor:pointer;">
+    +Fund Wallet
+  </span>
+</div>
 
   <div style="
     font-size:28px;
@@ -491,5 +494,11 @@ display:none;
 z-index:9998;
 "></div>
 
+<script>
+function fundWallet() {
+  alert("Funding coming soon");
+}
+</script>
+  
 </body>
 </html>
