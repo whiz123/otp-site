@@ -570,9 +570,58 @@ display:none;
 z-index:9998;
 "></div>
 
+<!-- 🔥 KORAPAY SCRIPT -->
+<script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
+  
 <script>
 function fundWallet() {
-  alert("Funding coming soon");
+
+  const email = document.getElementById("email").value;
+
+  if (!email) {
+    return alert("Enter your email first");
+  }
+
+  const amount = prompt("Enter amount to fund (₦):");
+
+  if (!amount || isNaN(amount)) {
+    return alert("Invalid amount");
+  }
+
+  if (Number(amount) < 1000 || Number(amount) > 100000) {
+    return alert("Amount must be between ₦1,000 and ₦100,000");
+  }
+
+  Korapay.initialize({
+    key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq", // 👈 replace this
+    reference: "FUND_" + Date.now(),
+    amount: Number(amount),
+    currency: "NGN",
+
+    customer: {
+      email: email
+    },
+
+    onSuccess: function (response) {
+
+      let balance = Number(localStorage.getItem("balance") || 0);
+      balance += Number(amount);
+      localStorage.setItem("balance", balance);
+
+      const balanceEl = document.getElementById("balance");
+      if (balanceEl) {
+        balanceEl.innerText = "₦" + balance;
+      }
+
+      alert("Wallet funded successfully!");
+
+    },
+
+    onClose: function () {
+      console.log("Payment closed");
+    }
+  });
+
 }
 </script>
   
