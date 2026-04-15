@@ -646,48 +646,38 @@ function closeFund() {
 
 // ✅ PAYMENT FUNCTION (FIXED)
 function payNow() {
-
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
 
   if (!email) return alert("Enter email first");
   if (!amount || isNaN(amount)) return alert("Invalid amount");
 
-  if (typeof Korapay === "undefined") {
-    return alert("Payment not ready. Refresh page.");
-  }
-
-  closeFund(); // close modal before opening payment
-
-  Korapay.initialize({
-    key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
-    reference: "FUND_" + Date.now(),
-    amount: Number(amount),
-    currency: "NGN",
-
-    customer: {
-      email: email
+  fetch("https://otp-backend.onrender.com/fund-wallet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
     },
+    body: JSON.stringify({
+      email: email,
+      amount: Number(amount)
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
 
-    onSuccess: function () {
-
-      let balance = Number(localStorage.getItem("balance") || 0);
-      balance += Number(amount);
-      localStorage.setItem("balance", balance);
-
-      document.getElementById("balance").innerText = balance.toLocaleString();
-
-      alert("Wallet funded successfully!");
-
-    },
-
-    onClose: function () {
-      console.log("Payment closed");
+    if (data?.data?.checkout_url) {
+      window.location.href = data.data.checkout_url;
+    } else {
+      alert("Payment failed. Try again.");
     }
+  })
+  .catch(err => {
+    console.log(err);
+    alert("Something went wrong");
   });
-
 }
-
+  
 </script>
   
 </body>
