@@ -573,43 +573,6 @@ z-index:9998;
 <!-- 🔥 KORAPAY SCRIPT -->
 <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
   
-<script>
-
-  // ✅ CHECK IF KORAPAY IS LOADED
-  if (typeof Korapay === "undefined") {
-    alert("Payment not ready. Refresh page.");
-    return;
-  }
-
-  // 🔥 OPEN PAYMENT
-  Korapay.initialize({
-    key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
-    reference: "FUND_" + Date.now(),
-    amount: Number(amount),
-    currency: "NGN",
-    customer: {
-      email: email
-    },
-
-    onSuccess: function () {
-
-      let balance = Number(localStorage.getItem("balance") || 0);
-      balance += Number(amount);
-      localStorage.setItem("balance", balance);
-
-      document.getElementById("balance").innerText = "₦" + balance;
-
-      alert("Wallet funded successfully!");
-    },
-
-    onClose: function () {
-      console.log("Payment closed");
-    }
-  });
-
-}
-</script>
-
 <!-- 💰 FUND WALLET MODAL -->
 <div id="fundModal" style="
 position:fixed;
@@ -667,10 +630,21 @@ z-index:9999;
     </button>
 
   </div>
-</div>  
+</div>
 
 <script>
 
+// ✅ OPEN MODAL
+function openFund() {
+  document.getElementById("fundModal").style.display = "flex";
+}
+
+// ✅ CLOSE MODAL
+function closeFund() {
+  document.getElementById("fundModal").style.display = "none";
+}
+
+// ✅ PAYMENT FUNCTION (FIXED)
 function payNow() {
 
   const amount = document.getElementById("fundAmount").value;
@@ -683,7 +657,7 @@ function payNow() {
     return alert("Payment not ready. Refresh page.");
   }
 
-  closeFund(); // close modal before payment
+  closeFund(); // close modal before opening payment
 
   Korapay.initialize({
     key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
@@ -701,7 +675,7 @@ function payNow() {
       balance += Number(amount);
       localStorage.setItem("balance", balance);
 
-      document.getElementById("balance").innerText = "₦" + balance;
+      document.getElementById("balance").innerText = balance.toLocaleString();
 
       alert("Wallet funded successfully!");
 
@@ -713,7 +687,8 @@ function payNow() {
   });
 
 }
-</script>  
+
+</script>
   
 </body>
 </html>
