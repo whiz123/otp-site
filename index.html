@@ -647,6 +647,8 @@ function closeFund() {
 // ✅ PAYMENT FUNCTION (FIXED)
 function payNow() {
 
+  console.log("Clicked Fund Now");
+  
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
 
@@ -654,9 +656,10 @@ function payNow() {
   if (!amount || isNaN(amount)) return alert("Invalid amount");
 
   if (typeof Korapay === "undefined") {
-    return alert("Payment not ready. Refresh page.");
-  }
-
+  alert("Loading payment... please wait");
+  setTimeout(payNow, 1500);
+  return;
+}
   closeFund(); // close modal before opening payment
 
   Korapay.initialize({
