@@ -382,11 +382,11 @@ loadData();
   document.getElementById("sideMenu").style.left = "0";
   document.getElementById("overlay").style.display = "block";
 
-  // load email (DO NOT BREAK OTHER THINGS)
   const email = localStorage.getItem("user_email");
+  const userEmailEl = document.getElementById("userEmail");
 
-  if (email) {
-    document.getElementById("userEmail").innerText = "👤 " + email;
+  if (email && userEmailEl) {
+    userEmailEl.innerText = "👤 " + email;
   }
 }
   // load email
