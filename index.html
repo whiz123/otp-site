@@ -171,7 +171,7 @@
 
   <div style="display:flex; justify-content:space-between; font-size:14px; color:#666;">
   <span>Current Balance</span>
-  <span onclick="openfund()" style="
+  <span onclick="openFund()" style="
   font-size:12px;
   background:#2d6cdf;
   color:white;
@@ -574,23 +574,6 @@ z-index:9998;
 <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
   
 <script>
-function fundWallet() {
-
-  const email = document.getElementById("email").value;
-
-  if (!email) {
-    return alert("Enter your email first");
-  }
-
-  const amount = prompt("Enter amount to fund (₦):");
-
-  if (!amount || isNaN(amount)) {
-    return alert("Invalid amount");
-  }
-
-  if (Number(amount) < 1000 || Number(amount) > 100000) {
-    return alert("Amount must be between ₦1,000 and ₦100,000");
-  }
 
   // ✅ CHECK IF KORAPAY IS LOADED
   if (typeof Korapay === "undefined") {
