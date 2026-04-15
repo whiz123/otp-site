@@ -645,10 +645,7 @@ function closeFund() {
 }
 
 // ✅ PAYMENT FUNCTION (FIXED)
-<script>
 function payNow() {
-
-  console.log("Clicked Fund Now");
 
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
@@ -660,13 +657,17 @@ function payNow() {
     return alert("Payment not ready. Refresh page.");
   }
 
-  // 🚀 OPEN PAYMENT DIRECTLY (NO DELAY, NO CLOSE FIRST)
+  closeFund(); // close modal before opening payment
+
   Korapay.initialize({
     key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
     reference: "FUND_" + Date.now(),
     amount: Number(amount),
     currency: "NGN",
-    customer: { email },
+
+    customer: {
+      email: email
+    },
 
     onSuccess: function () {
 
@@ -678,17 +679,15 @@ function payNow() {
 
       alert("Wallet funded successfully!");
 
-      // ✅ CLOSE AFTER SUCCESS
-      closeFund();
     },
 
     onClose: function () {
-      console.log("closed");
+      console.log("Payment closed");
     }
-
   });
 
 }
+
 </script>
   
 </body>
