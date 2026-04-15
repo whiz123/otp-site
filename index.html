@@ -652,7 +652,7 @@ function payNow() {
   if (!email) return alert("Enter email first");
   if (!amount || isNaN(amount)) return alert("Invalid amount");
 
-  fetch("https://otp-backend.onrender.com/fund-wallet", {
+  fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
