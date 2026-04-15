@@ -647,13 +647,8 @@ function closeFund() {
 // ✅ PAYMENT FUNCTION (FIXED)
 function payNow() {
 
- <script>
-function payNow() {
-
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
-
-  console.log("Clicked Fund Now"); // 👈 DEBUG
 
   if (!email) return alert("Enter email first");
   if (!amount || isNaN(amount)) return alert("Invalid amount");
@@ -662,14 +657,17 @@ function payNow() {
     return alert("Payment not ready. Refresh page.");
   }
 
-  closeFund();
+  closeFund(); // close modal before opening payment
 
   Korapay.initialize({
     key: "pk_live_TggCQduimqKmNaHFq9Awp5SNsXsh98rH8W4uCVxq",
     reference: "FUND_" + Date.now(),
     amount: Number(amount),
     currency: "NGN",
-    customer: { email },
+
+    customer: {
+      email: email
+    },
 
     onSuccess: function () {
 
@@ -681,11 +679,16 @@ function payNow() {
 
       alert("Wallet funded successfully!");
 
+    },
+
+    onClose: function () {
+      console.log("Payment closed");
     }
   });
 
 }
-</script> 
+
+</script>
   
 </body>
 </html>
