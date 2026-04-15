@@ -203,7 +203,7 @@
 
     <div id="priceBox" class="price">Price: Loading...</div>
 
-    <button id="payBtn">Pay & Get OTP</button>
+    <button id="buyBtn">Pay & Get OTP</button>
 
     <div class="mini-cards">
       <div class="mini">⚡ Fast</div>
@@ -307,26 +307,35 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
   if (!email) return alert("Enter your email");
 
-  const res = await fetch("https://otp-backend.onrender.com/buy-otp", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    email,
-    country,
-    service
-  })
+  try {
+    const res = await fetch(`${API}/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        amount,
+        country,
+        service
+      })
+    });
+
+    const data = await res.json();
+
+    if (data && data.data && data.data.checkout_url) {
+      saveSelection(country, service);
+      window.location.href = data.data.checkout_url;
+    } else {
+      console.log(data);
+      alert(JSON.stringify(data));
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Payment failed");
+  }
 });
-
-const data = await res.json();
-
-if (!data.status) {
-  return alert(data.message);
-}
-
-showOTPResult(data.number, service);
-checkOTP(data.order_id);
 
 // 🔥 EMAIL SYSTEM (FIXED)
 
@@ -565,12 +574,6 @@ z-index:9998;
 function fundWallet() {
   alert("Funding coming soon");
 }
-</script>
-
-<script>
-document.getElementById("payBtn").onclick = function () {
-  buyOTP();
-};
 </script>
   
 </body>
