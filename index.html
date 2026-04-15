@@ -382,6 +382,13 @@ loadData();
   document.getElementById("sideMenu").style.left = "0";
   document.getElementById("overlay").style.display = "block";
 
+  // load email (DO NOT BREAK OTHER THINGS)
+  const email = localStorage.getItem("user_email");
+
+  if (email) {
+    document.getElementById("userEmail").innerText = "👤 " + email;
+  }
+}
   // load email
   const email = localStorage.getItem("user_email") || "Guest";
   document.getElementById("userEmail").innerText = "📧 " + email;
