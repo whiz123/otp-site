@@ -179,9 +179,9 @@
   border-radius:12px;
   cursor:pointer;
 ">
+<span onclick="openFund()">
   +Fund Wallet
 </span>
-</div>
 
   <div style="
     font-size:28px;
@@ -676,6 +676,12 @@ function payNow() {
   console.log(err);
   alert("Payment server slow, please try again");
 });
+  
+function openFund() {
+  document.getElementById("fundModal").style.display = "block";
+}
+
+ alert("JS is working"); 
   
 </script>
   
