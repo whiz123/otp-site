@@ -615,6 +615,7 @@ z-index:9999;
 
     <h2 style="margin-bottom:10px;">💳 Fund Wallet</h2>
 
+
 <!-- ✅ ADD THIS HERE -->
 <div style="
   background:#f8f9ff;
@@ -667,7 +668,7 @@ z-index:9999;
     border-radius:10px;
     font-size:16px;
     ">
-    I HAVE PAID
+    Fund Now
     </button>
 
     <button onclick="closeFund()" style="
@@ -727,23 +728,6 @@ function payNow() {
     alert("Something went wrong");
   });
 }
-
-<script>
-
-  // your existing code (payNow, fetch, etc...)
-
-  function submitFund() {
-    const amount = document.getElementById("fundAmount").value;
-
-    if (!amount || amount < 100) {
-      alert("Enter valid amount");
-      return;
-    }
-
-    alert("Payment submitted. Waiting for confirmation.");
-
-    closeFund();
-  }
   
 </script>
   
