@@ -662,25 +662,19 @@ function payNow() {
       amount: Number(amount)
     })
   })
-  .then(res => res.json()) // 🔥 VERY IMPORTANT
-.then(data => {
 
-  console.log("KORAPAY FULL RESPONSE:", data);
+  .then(data => {
+    console.log("FULL RESPONSE:", data);
 
-  if (data && data.data && data.data.checkout_url) {
-    window.location.href = data.data.checkout_url;
-  } 
-  else if (data && data.checkout_url) {
-    window.location.href = data.checkout_url;
-  } 
-  else {
-    alert("Payment failed");
-  }
-
+    if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+    } else {
+        alert("Payment failed");
+    }
 })
 .catch(err => {
-  console.log(err);
-  alert("Payment server slow, please try again");
+    console.log(err);
+    alert("Something went wrong");
 });
   
 </script>
