@@ -739,18 +739,12 @@ function closeFund() {
 
 function submitFund() {
   const amount = document.getElementById("fundAmount").value;
-  const receipt = document.getElementById("receipt").files[0];
-  
+
   if (!amount || Number(amount) < 100) {
     alert("Enter valid amount");
     return;
   }
 
-  if (!receipt) {
-    alert("Please upload payment receipt");
-    return;
-  }
-  
   // custom popup (works on phone)
   const msg = document.createElement("div");
   msg.innerText = "Payment received. Awaiting confirmation.";
