@@ -728,7 +728,27 @@ function payNow() {
     alert("Something went wrong");
   });
 }
-  
+
+function openFund() {
+  document.getElementById("fundModal").style.display = "block";
+}
+
+function closeFund() {
+  document.getElementById("fundModal").style.display = "none";
+}
+
+function submitFund() {
+  const amount = document.getElementById("fundAmount").value;
+
+  if (!amount || Number(amount) < 100) {
+    alert("Enter valid amount");
+    return;
+  }
+
+  alert("Payment received. Awaiting confirmation.");
+  closeFund();
+}
+
 </script>
   
 </body>
