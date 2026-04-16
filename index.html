@@ -740,7 +740,7 @@ function closeFund() {
 function submitFund() {
   const amount = document.getElementById("fundAmount").value;
   const receipt = document.getElementById("receipt").files[0];
-
+  
   if (!amount || Number(amount) < 100) {
     alert("Enter valid amount");
     return;
@@ -750,8 +750,8 @@ function submitFund() {
     alert("Please upload payment receipt");
     return;
   }
-
-  // custom popup
+  
+  // custom popup (works on phone)
   const msg = document.createElement("div");
   msg.innerText = "Payment received. Awaiting confirmation.";
   msg.style.position = "fixed";
@@ -759,14 +759,14 @@ function submitFund() {
   msg.style.left = "50%";
   msg.style.transform = "translateX(-50%)";
   msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
-  msg.style.color = "white";
-  msg.style.padding = "12px 20px";
-  msg.style.borderRadius = "12px";
-  msg.style.fontSize = "14px";
-  msg.style.fontWeight = "500";
-  msg.style.boxShadow = "0 6px 20px rgba(0,0,0,0.2)";
-  msg.style.zIndex = "9999";
-
+  msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
+msg.style.color = "white";
+msg.style.padding = "12px 20px";
+msg.style.borderRadius = "12px";
+msg.style.fontSize = "14px";
+msg.style.fontWeight = "500";
+msg.style.boxShadow = "0 6px 20px rgba(0,0,0,0.2)";
+msg.style.zIndex = "9999";
   document.body.appendChild(msg);
 
   setTimeout(() => {
