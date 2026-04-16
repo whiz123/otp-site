@@ -7,19 +7,17 @@
 
 <body style="font-family: Arial; text-align: center; padding: 30px;">
 
- <h2 id="title">Checking payment...</h2>
+<h2 id="title">Checking payment...</h2>
 <p id="status">Initializing...</p>
-<h3 id="otpBox" style="margin-top:20px; color:green;"></h3> 
-
+<h3 id="otpBox" style="margin-top:20px; color:green;"></h3>
 
 <script>
 
 const API = "https://otp-backend-srw4.onrender.com";
 
- // 🔥 SAVE ORDER FUNCTION (PASTE HERE)
+// KEEP YOUR ORDER SYSTEM
 function saveOrder(data) {
   const email = localStorage.getItem("user_email") || "guest";
-
   let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
 
   orders.unshift({
@@ -33,28 +31,45 @@ function saveOrder(data) {
   });
 
   localStorage.setItem("orders_" + email, JSON.stringify(orders));
-} 
+}
+
+// GET URL PARAMS
 const urlParams = new URLSearchParams(window.location.search);
 const reference = urlParams.get("reference");
-// ✅ VERIFY PAYMENT BEFORE ANYTHING
+const type = urlParams.get("type"); // 🔥 VERY IMPORTANT
+
+// ✅ VERIFY PAYMENT (FIXED)
 async function verifyPayment() {
-  if (!reference || reference === "null") {
+
+  if (!reference) {
     document.getElementById("title").innerText = "Payment Failed ❌";
-    document.getElementById("status").innerText = "No valid transaction.";
     return false;
   }
 
   try {
-    const res = await fetch(`${API}/verify?reference=${reference}`);
+    const res = await fetch(`${API}/verify-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ reference })
+    });
+
     const data = await res.json();
 
     if (!data.success) {
       document.getElementById("title").innerText = "Payment Failed ❌";
-      document.getElementById("status").innerText = "Payment not completed.";
       return false;
     }
 
-    document.getElementById("title").innerText = "Payment Successful";
+    document.getElementById("title").innerText = "Payment Successful ✅";
+
+    // 🔥 IF FUND WALLET → STOP HERE
+    if (type === "fund") {
+      document.getElementById("status").innerText = "Wallet funded successfully 💰";
+      return false; // STOP OTP FLOW
+    }
+
     return true;
 
   } catch (err) {
@@ -63,75 +78,69 @@ async function verifyPayment() {
     return false;
   }
 }
-  
-// get saved values
+
+
+// 🔥 OTP FLOW (UNCHANGED BUT FIXED)
 const country = localStorage.getItem("country");
 const service = localStorage.getItem("service");
+const email = localStorage.getItem("user_email");
 
 async function getOTP() {
   try {
 
-    // BUY NUMBER
     const res = await fetch(`${API}/buy-number`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-  country,
-  service,
-  reference
-})
+        country,
+        service,
+        email,
+        price: Number(localStorage.getItem("price"))
+      })
     });
 
     const data = await res.json();
 
-    // ❌ if failed
     if (!data.id) {
-      document.getElementById("status").innerText = "Error buying number";
+      document.getElementById("status").innerText = data.error || "Error buying number";
       return;
     }
 
-    // ✅ SHOW NUMBER IMMEDIATELY
     document.getElementById("status").innerText = "Number ready ✅";
 
     document.getElementById("otpBox").innerText =
       "📱 Number: " + data.phone + "\n⏳ Waiting for OTP...";
 
+    saveOrder({
+      number: data.phone,
+      service: service,
+      country: country
+    });
+
     const id = data.id;
 
-    // 🔥 SAVE ORDER HERE (ONCE)
-
-saveOrder({
-  number: data.phone,
-  service: "WhatsApp", // or your selected service
-  country: "USA" // or your selected country
-});
-
-const interval = setInterval(async () => {
-
-    // 🔁 CHECK FOR OTP
+    const interval = setInterval(async () => {
 
       const check = await fetch(`${API}/check?id=${id}`);
       const sms = await check.json();
 
-      // ✅ FIXED FOR 5SIM RESPONSE
       if (sms.sms && sms.sms.length > 0) {
 
         clearInterval(interval);
 
         const code = sms.sms[0].code;
 
-        // 🔥 UPDATE ORDER TO SUCCESS
-const email = localStorage.getItem("user_email") || "guest";
-let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
+        const email = localStorage.getItem("user_email") || "guest";
+        let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
 
-if (orders.length > 0) {
-  orders[0].status = "success";
-  orders[0].otp = code;
-}
+        if (orders.length > 0) {
+          orders[0].status = "success";
+          orders[0].otp = code;
+        }
 
-localStorage.setItem("orders_" + email, JSON.stringify(orders));
+        localStorage.setItem("orders_" + email, JSON.stringify(orders));
 
         document.getElementById("status").innerText = "OTP received ✅";
 
@@ -148,7 +157,8 @@ localStorage.setItem("orders_" + email, JSON.stringify(orders));
   }
 }
 
-// run immediately
+
+// 🚀 RUN
 verifyPayment().then(ok => {
   if (ok) {
     getOTP();
