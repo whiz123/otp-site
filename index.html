@@ -179,9 +179,9 @@
   border-radius:12px;
   cursor:pointer;
 ">
-<span onclick="openFund()">
   +Fund Wallet
 </span>
+</div>
 
   <div style="
     font-size:28px;
@@ -653,35 +653,30 @@ function payNow() {
   if (!amount || isNaN(amount)) return alert("Invalid amount");
 
   fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    email: email,
-    amount: Number(amount)
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      amount: Number(amount)
+    })
   })
-})
-.then(res => res.json())
-.then(data => {
-  console.log("FUND RESPONSE:", data);
+  .then(data => {
+  console.log("FULL RESPONSE:", data);
 
-  if (data.checkout_url) {
-    window.location.href = data.checkout_url;
-  } else {
-    alert("Payment failed");
+  if (data?.data?.checkout_url || data?.checkout_url) {
+    window.location.href = data.data?.checkout_url || data.checkout_url;
+  } 
+  else {
+    alert("Payment server slow, please try again");
   }
 })
-.catch(err => {
-  console.log(err);
-  alert("Payment server slow, please try again");
-});
-  
-function openFund() {
-  document.getElementById("fundModal").style.display = "block";
+  .catch(err => {
+    console.log(err);
+    alert("Something went wrong");
+  });
 }
-
- alert("JS is working"); 
   
 </script>
   
