@@ -36,7 +36,10 @@
       padding: 20px;
     }
 
-    h1 { font-size: 26px; margin-bottom: 5px; }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
 
     .subtitle {
       font-size: 14px;
@@ -49,8 +52,10 @@
       padding: 18px;
       border-radius: 16px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      overflow: hidden; /* ✅ FIX */
     }
 
+    /* ✅ FIXED INPUT OVERFLOW */
     select, input {
       width: 100%;
       padding: 14px;
@@ -58,7 +63,7 @@
       border-radius: 10px;
       border: 1px solid #ddd;
       font-size: 15px;
-      box-sizing: border-box;
+      box-sizing: border-box; /* 🔥 MAIN FIX */
     }
 
     button {
@@ -78,140 +83,602 @@
       font-size: 16px;
       color: #007bff;
     }
+
+    .mini-cards {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      gap: 8px;
+    }
+
+    .mini {
+      flex: 1;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      text-align: center;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+    }
+
+    .trust {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #555;
+      text-align: center;
+    }
+
+    .support {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0088cc;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 14px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
   </style>
 </head>
 
 <body>
 
+ <!-- ☰ MENU BUTTON -->
+<div class="topbar" style="display:flex; align-items:center; padding:10px;">
+
+  <!-- ☰ MENU BUTTON -->
+  <button onclick="openMenu()" style="
+  font-size:26px;
+  background:rgba(255,255,255,0.15);
+  border:none;
+  color:white;
+  padding:8px 12px;
+  border-radius:8px;
+">
+  ☰
+</button>
+
+  <div class="scroll">
+    ⚡ Instant OTP Delivery • 🔒 Secure Payments • 🌍 Trusted by 10,000+ users • 💬 24/7 Support
+  </div>
+
+</div>
+
 <div class="container">
 
-<h1>OTP Service 📱</h1>
-<div class="subtitle">Buy virtual numbers instantly</div>
-
-<!-- BALANCE -->
-<div style="background:#fff;padding:20px;border-radius:16px;margin-bottom:20px;">
-  <div style="display:flex;justify-content:space-between;">
-    <span>Balance</span>
-    <span onclick="openFund()" style="cursor:pointer;background:#2d6cdf;color:#fff;padding:4px 10px;border-radius:12px;">+Fund</span>
+  <h1>OTP Service 📱</h1>
+  <div class="subtitle">
+    Buy virtual numbers instantly and receive OTP in seconds
   </div>
-  <h2>₦<span id="balance">0</span></h2>
+
+  <div style="
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.05);
+  margin-bottom:20px;
+">
+
+  <div style="display:flex; justify-content:space-between; font-size:14px; color:#666;">
+  <span>Current Balance</span>
+  <span onclick="openFund()" style="
+  font-size:12px;
+  background:#2d6cdf;
+  color:white;
+  padding:3px 10px;
+  border-radius:12px;
+  cursor:pointer;
+">
+  +Fund Wallet
+</span>
 </div>
 
-<div class="card">
-
-<select id="country"></select>
-<select id="service"></select>
-<input type="email" id="email" placeholder="Enter your email">
-
-<div id="priceBox">Loading price...</div>
-
-<button id="buyBtn">Pay & Get OTP</button>
-
-</div>
-
-</div>
-
-<!-- FUND MODAL -->
-<div id="fundModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;">
-  <div style="background:#fff;padding:20px;border-radius:12px;width:300px;">
-    <h3>Fund Wallet</h3>
-    <input id="fundAmount" type="number" placeholder="Amount">
-    <button onclick="payNow()">Fund Now</button>
-    <button onclick="closeFund()">Cancel</button>
+  <div style="
+    font-size:28px;
+    font-weight:bold;
+    color:#2d6cdf;
+    margin-top:5px;
+  ">
+    ₦<span id="balance">0.00</span>
   </div>
+
+</div>
+  
+  <div class="card">
+
+    <select id="country"></select>
+    <select id="service"></select>
+
+    <input type="email" id="email" placeholder="Enter your email">
+
+    <div id="priceBox" class="price">Price: Loading...</div>
+
+    <button id="buyBtn">Pay & Get OTP</button>
+
+    <div class="mini-cards">
+      <div class="mini">⚡ Fast</div>
+      <div class="mini">🔒 Secure</div>
+      <div class="mini">🌍 Global</div>
+    </div>
+
+  </div>
+
+  <div class="trust">
+    Secure checkout powered by Korapay
+  </div>
+
 </div>
 
+<a href="https://t.me/payboostify_support" class="support">💬 Support</a>
+
+<script>
+ function saveSelection(country, service) {
+  localStorage.setItem("country", country);
+  localStorage.setItem("service", service);
+} 
+const API = "https://otp-backend-srw4.onrender.com";
+
+function formatService(name) {
+  return name
+    .replace("whatsapp", "WhatsApp")
+    .replace("telegram", "Telegram")
+    .replace("facebook", "Facebook")
+    .replace("instagram", "Instagram")
+    .replace("twitter", "Twitter")
+    .replace("tiktok", "TikTok");
+}
+
+async function updatePrice() {
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
+  const priceBox = document.getElementById("priceBox");
+
+  if (!country || !service) return;
+
+  try {
+    const res = await fetch(`${API}/price?country=${country}&service=${service}`);
+    const data = await res.json();
+
+    priceBox.innerHTML = `
+<span style="color:#888;font-size:14px;">
+From ₦1,500 – ₦5,000 depending on country
+</span><br>
+<strong style="font-size:20px;font-weight:700;">
+₦${Number(data.price).toLocaleString()}
+</strong>
+`;
+    window.currentPrice = data.price;
+  } catch {
+    priceBox.innerText = "Error loading price";
+  }
+}
+
+async function loadData() {
+  const countrySelect = document.getElementById("country");
+  const serviceSelect = document.getElementById("service");
+
+  const countries = await fetch(API + "/countries").then(r => r.json());
+
+  countries.forEach(c => {
+    const option = document.createElement("option");
+    option.value = c;
+    option.text = c.toUpperCase();
+    countrySelect.appendChild(option);
+  });
+
+  async function loadServices() {
+    const country = countrySelect.value;
+
+    const services = await fetch(`${API}/services?country=${country}`).then(r => r.json());
+
+    serviceSelect.innerHTML = "";
+
+    services.forEach(s => {
+      const option = document.createElement("option");
+      option.value = s;
+      option.text = formatService(s);
+      serviceSelect.appendChild(option);
+    });
+
+    updatePrice();
+  }
+
+  await loadServices();
+
+  countrySelect.addEventListener("change", loadServices);
+  serviceSelect.addEventListener("change", updatePrice);
+}
+
+document.getElementById("buyBtn").addEventListener("click", async () => {
+  const country = document.getElementById("country").value;
+  const service = document.getElementById("service").value;
+  const email = document.getElementById("email").value;
+  const amount = window.currentPrice;
+
+  if (!email) return alert("Enter your email");
+
+  try {
+    const res = await fetch(`${API}/create-payment`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        amount,
+        country,
+        service
+      })
+    });
+
+    const data = await res.json();
+
+    if (data && data.data && data.data.checkout_url) {
+      saveSelection(country, service);
+      window.location.href = data.data.checkout_url;
+    } else {
+      console.log(data);
+      alert(JSON.stringify(data));
+    }
+
+  } catch (err) {
+    console.log(err);
+    alert("Payment failed");
+  }
+});
+
+// 🔥 EMAIL SYSTEM (FIXED)
+
+// run when page loads
+window.addEventListener("load", () => {
+  const savedEmail = localStorage.getItem("user_email");
+  const popup = document.getElementById("emailPopup");
+
+  if (!savedEmail) {
+    popup.style.display = "flex"; // SHOW popup
+  } else {
+    popup.style.display = "none";
+
+    const emailInput = document.getElementById("email");
+    if (emailInput) emailInput.value = savedEmail;
+  }
+});
+
+// save email
+function saveEmail() {
+  const email = document.getElementById("popupEmail").value;
+
+  if (!email) {
+    alert("Enter your email");
+    return;
+  }
+
+  localStorage.setItem("user_email", email);
+
+  const emailInput = document.getElementById("email");
+  if (emailInput) emailInput.value = email;
+
+  document.getElementById("emailPopup").style.display = "none";
+}
+
+// skip
+function skipEmail() {
+  document.getElementById("emailPopup").style.display = "none";
+}
+  
+loadData();
+
+ function openMenu() {
+  document.getElementById("sideMenu").style.left = "0";
+  document.getElementById("overlay").style.display = "block";
+
+  // load email
+  const email = localStorage.getItem("user_email") || "Guest";
+  document.getElementById("userEmail").innerText = "📧 " + email;
+}
+
+function closeMenu() {
+  document.getElementById("sideMenu").style.left = "-280px";
+  document.getElementById("overlay").style.display = "none";
+}
+
+function goOrders() {
+  window.location.href = "orders.html";
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}  
+</script>
+
+ <!-- 🔥 EMAIL POPUP -->
+<div id="emailPopup" style="
+position: fixed;
+top:0; left:0;
+width:100%; height:100%;
+background: rgba(0,0,0,0.6);
+display:none; /* start hidden */
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+  <div style="
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  width:90%;
+  max-width:340px;
+  text-align:center;
+  ">
+
+    <h3 style="margin-bottom:8px;">Continue</h3>
+
+    <p style="font-size:13px; color:#666; margin-bottom:15px;">
+      Enter your email (no signup required)
+    </p>
+
+    <input type="email" id="popupEmail"
+    placeholder="Enter your email"
+    style="width:100%; padding:12px; border-radius:8px; border:1px solid #ddd;" />
+
+    <button onclick="saveEmail()"
+    style="margin-top:15px; width:100%; padding:12px; background:#007bff; color:white; border:none; border-radius:8px; font-weight:600;">
+      Continue
+    </button>
+
+    <button onclick="skipEmail()"
+    style="margin-top:10px; width:100%; padding:10px; background:transparent; border:none; color:#666; font-size:14px;">
+      Continue without email
+    </button>
+
+  </div>
+</div> 
+
+  </script>
+
+<!-- 🔥 SIDE MENU -->
+<div id="sideMenu" style="
+position: fixed;
+top:0;
+left:-280px;
+width:220px;
+height:100%;
+background:#fff;
+box-shadow:none;
+transition:0.3s;
+z-index:9999;
+padding:18px;
+font-family:Arial;
+">
+
+  <!-- MENU ITEMS -->
+
+<div onclick="goHome()" 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='#eaf2ff'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+  background:#eaf2ff;
+  border-left:4px solid #2d6cdf;
+">
+  <img src="https://img.icons8.com/ios/20/home.png"/>
+  <span style="font-size:15px; font-weight:600; color:#2d6cdf;">
+    New Order
+  </span>
+</div>
+
+<div onclick="goOrders()" 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='transparent'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+">
+  <img src="https://img.icons8.com/ios/20/list.png"/>
+  <span style="font-size:15px; font-weight:500;">My Orders</span>
+</div>
+
+<div 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='transparent'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+">
+  <img src="https://img.icons8.com/ios/20/help.png"/>
+  <span style="font-size:15px; font-weight:500;">Support</span>
+</div>
+
+<div 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='transparent'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+">
+  <img src="https://img.icons8.com/ios/20/graduation-cap.png"/>
+  <span style="font-size:15px; font-weight:500;">Tutorial</span>
+</div>
+
+<div 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='transparent'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+">
+  <img src="https://img.icons8.com/ios/20/share.png"/>
+  <span style="font-size:15px; font-weight:500;">Referral</span>
+</div>
+
+<div 
+onmouseover="this.style.background='#f5f7fb'" 
+onmouseout="this.style.background='transparent'"
+style="
+  padding:14px 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+  border-radius:10px;
+">
+  <img src="https://img.icons8.com/ios/20/business.png"/>
+  <span style="font-size:15px; font-weight:500;">Reseller</span>
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeMenu()" style="
+position: fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.2);
+display:none;
+z-index:9998;
+"></div>
+
+<!-- 🔥 KORAPAY SCRIPT -->
 <script src="https://korablobstorage.blob.core.windows.net/modal-bucket/korapay-collections.min.js"></script>
+  
+<!-- 💰 FUND WALLET MODAL -->
+<div id="fundModal" style="
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+  <div style="
+  background:#ffffff;
+  padding:25px;
+  border-radius:16px;
+  width:85%;
+  max-width:320px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  ">
+
+    <h2 style="margin-bottom:10px;">💳 Fund Wallet</h2>
+
+    <input id="fundAmount" type="number" placeholder="Enter amount (₦)"
+    style="
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    margin-top:10px;
+    font-size:16px;
+    ">
+
+    <button onclick="payNow()" style="
+    margin-top:15px;
+    width:100%;
+    padding:14px;
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    ">
+    Fund Now
+    </button>
+
+    <button onclick="closeFund()" style="
+    margin-top:10px;
+    background:none;
+    border:none;
+    color:#999;
+    ">
+    Cancel
+    </button>
+
+  </div>
+</div>
 
 <script>
 
-const API = "https://otp-backend-srw4.onrender.com";
-
-// LOAD DATA
-async function loadData() {
-  const countries = await fetch(API+"/countries").then(r=>r.json());
-  const countrySelect = document.getElementById("country");
-
-  countries.forEach(c=>{
-    let o=document.createElement("option");
-    o.value=c;
-    o.text=c;
-    countrySelect.appendChild(o);
-  });
-
-  loadServices();
+// ✅ OPEN MODAL
+function openFund() {
+  document.getElementById("fundModal").style.display = "flex";
 }
 
-async function loadServices(){
-  const c=document.getElementById("country").value;
-  const services=await fetch(API+"/services?country="+c).then(r=>r.json());
-
-  const s=document.getElementById("service");
-  s.innerHTML="";
-
-  services.forEach(x=>{
-    let o=document.createElement("option");
-    o.value=x;
-    o.text=x;
-    s.appendChild(o);
-  });
-
-  updatePrice();
+// ✅ CLOSE MODAL
+function closeFund() {
+  document.getElementById("fundModal").style.display = "none";
 }
 
-async function updatePrice(){
-  const c=document.getElementById("country").value;
-  const s=document.getElementById("service").value;
+// ✅ PAYMENT FUNCTION (FIXED)
+function payNow() {
+  const amount = document.getElementById("fundAmount").value;
+  const email = document.getElementById("email").value;
 
-  const data=await fetch(`${API}/price?country=${c}&service=${s}`).then(r=>r.json());
+  if (!email) return alert("Enter email first");
+  if (!amount || isNaN(amount)) return alert("Invalid amount");
 
-  document.getElementById("priceBox").innerText="₦"+data.price;
-  window.currentPrice=data.price;
-}
-
-// FUND WALLET
-function openFund(){document.getElementById("fundModal").style.display="flex";}
-function closeFund(){document.getElementById("fundModal").style.display="none";}
-
-function payNow(){
-  const amount=document.getElementById("fundAmount").value;
-  const email=document.getElementById("email").value;
-
-  fetch(`${API}/fund-wallet`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({email,amount:Number(amount)})
+  fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email,
+      amount: Number(amount)
+    })
   })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data?.data?.checkout_url){
-      window.location.href=data.data.checkout_url;
-    }else{
-      alert("Payment failed");
-    }
+  .then(data => {
+  console.log("FULL RESPONSE:", data);
+
+  if (data?.data?.checkout_url || data?.checkout_url) {
+    window.location.href = data.data?.checkout_url || data.checkout_url;
+  } 
+  else {
+    alert("Payment server slow, please try again");
+  }
+})
+  .catch(err => {
+    console.log(err);
+    alert("Something went wrong");
   });
 }
-
-// BUY OTP (NO KORAPAY)
-document.getElementById("buyBtn").onclick=()=>{
-  const country=document.getElementById("country").value;
-  const service=document.getElementById("service").value;
-  const email=document.getElementById("email").value;
-
-  localStorage.setItem("country",country);
-  localStorage.setItem("service",service);
-  localStorage.setItem("user_email",email);
-  localStorage.setItem("price",window.currentPrice);
-
-  window.location.href="success.html?type=otp";
-};
-
-document.getElementById("country").onchange=loadServices;
-document.getElementById("service").onchange=updatePrice;
-
-loadData();
-
+  
 </script>
-
+  
 </body>
 </html>
