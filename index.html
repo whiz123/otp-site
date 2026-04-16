@@ -729,6 +729,23 @@ function payNow() {
   });
 }
   
+<script>
+
+  // your existing code...
+
+  function submitFund() {
+    const amount = document.getElementById("fundAmount").value;
+
+    if (!amount || amount < 100) {
+      alert("Enter valid amount");
+      return;
+    }
+
+    alert("Payment submitted. Waiting for confirmation.");
+
+    closeFund();
+  }
+  
 </script>
   
 </body>
