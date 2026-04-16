@@ -171,17 +171,26 @@
 
   <div style="display:flex; justify-content:space-between; font-size:14px; color:#666;">
   <span>Current Balance</span>
+
   <span onclick="openFund()" style="
-  font-size:12px;
-  background:#2d6cdf;
-  color:white;
-  padding:3px 10px;
-  border-radius:12px;
-  cursor:pointer;
-">
-  +Fund Wallet
-</span>
+    font-size:12px;
+    background:#2d6cdf;
+    color:white;
+    padding:3px 10px;
+    border-radius:12px;
+    cursor:pointer;
+  ">
+    +Fund Wallet
+  </span>
 </div>
+
+<p style="
+  font-size:11px;
+  color:#888;
+  margin-top:4px;
+">
+Optional: Fund wallet for faster checkout
+</p>
 
   <div style="
     font-size:28px;
@@ -201,9 +210,18 @@
 
     <input type="email" id="email" placeholder="Enter your email">
 
-    <div id="priceBox" class="price">Price: Loading...</div>
+<div id="priceBox" class="price">Price: Loading...</div>
 
-    <button id="buyBtn">Pay & Get OTP</button>
+    <p style="
+  font-size:13px;
+  color:#666;
+  margin-bottom:8px;
+  text-align:center;
+">
+Pay directly or fund your wallet first
+</p>
+
+<button id="buyBtn">Pay & Get OTP</button>
 
     <div class="mini-cards">
       <div class="mini">⚡ Fast</div>
