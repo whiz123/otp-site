@@ -667,11 +667,11 @@ function payNow() {
     console.log(data);
 
     if (data?.data?.checkout_url) {
-      window.location.href = data.data.checkout_url;
-    } else {
-      alert(JSON.stringify(data));
-    }
-  })
+    window.location.href = data.data.checkout_url;
+  } else {
+    alert(data.message.replace("Amount must be between", "Enter between"));
+  }
+})
   .catch(err => {
     console.log(err);
     alert("Something went wrong");
