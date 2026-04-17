@@ -624,28 +624,6 @@ z-index:9999;
   text-align:left;
 ">
 
-  <p style="margin:0; font-size:13px; color:#777;">Bank</p>
-  <p style="margin:0 0 8px 0; font-weight:600;">Moniepoint MFB</p>
-
-  <p style="margin:0; font-size:13px; color:#777;">Account Name</p>
-  <p style="margin:0 0 8px 0; font-weight:600;">GOPAYNA TECHNOLOGIES</p>
-
-  <p style="margin:0; font-size:13px; color:#777;">Account Number</p>
-  <p style="
-    margin:0;
-    font-size:18px;
-    font-weight:700;
-    color:#2d6cdf;
-  ">
-    6399730251
-  </p>
-
-</div>
-
-<p style="font-size:13px; color:#e63946;">
-⚠️ Use your registered email as narration
-</p>
-
 <input id="fundAmount" type="number" placeholder="Enter amount (₦)"
     style="
     width:100%;
@@ -656,7 +634,7 @@ z-index:9999;
     font-size:16px;
     ">
 
-    <button onclick="submitFund()" style="
+    <button onclick="startPayment()" style="
   margin-top:15px;
   width:100%;
   padding:14px;
@@ -666,7 +644,7 @@ z-index:9999;
   border-radius:10px;
   font-size:16px;
 ">
-  I HAVE PAID
+  Proceed to Payment
 </button>
 
     <button onclick="closeFund()" style="
@@ -718,12 +696,12 @@ function payNow() {
     window.location.href = data.data?.checkout_url || data.checkout_url;
   } 
   else {
-    alert("Payment server slow, please try again");
+    showMessage("Payment server busy, try again");
   }
 })
   .catch(err => {
     console.log(err);
-    alert("Something went wrong");
+    showMessage("Something went wrong");
   });
 }
 
@@ -735,35 +713,31 @@ function closeFund() {
   document.getElementById("fundModal").style.display = "none";
 }
 
-function submitFund() {
-  const amount = document.getElementById("fundAmount").value;
-
-  if (!amount || Number(amount) < 100) {
-    alert("Enter valid amount");
-    return;
-  }
-
-  // custom popup (works on phone)
+// ✅ PASTE HERE (exactly here)
+function showMessage(text) {
   const msg = document.createElement("div");
-  msg.innerText = "Payment received. Awaiting confirmation.";
+  msg.innerText = text;
+
   msg.style.position = "fixed";
   msg.style.bottom = "20px";
   msg.style.left = "50%";
   msg.style.transform = "translateX(-50%)";
-  msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
-  msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
-msg.style.color = "white";
-msg.style.padding = "12px 20px";
-msg.style.borderRadius = "12px";
-msg.style.fontSize = "14px";
-msg.style.fontWeight = "500";
-msg.style.boxShadow = "0 6px 20px rgba(0,0,0,0.2)";
-msg.style.zIndex = "9999";
+  msg.style.background = "#111";
+  msg.style.color = "#fff";
+  msg.style.padding = "12px 18px";
+  msg.style.borderRadius = "8px";
+  msg.style.fontSize = "14px";
+  msg.style.zIndex = "9999";
+
   document.body.appendChild(msg);
 
-  setTimeout(() => {
-    msg.remove();
-  }, 3000);
+  setTimeout(() => msg.remove(), 2500);
+}
+  
+  if (!amount || Number(amount) < 100) {
+    showMessage("Enter valid amount");
+    return;
+  }
 
   closeFund();
 }
