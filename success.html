@@ -28,7 +28,11 @@
         const data = await res.json();
 
           if (data.success === true) {
-  document.getElementById("status").innerText = "✅ Payment Successful!";
+document.getElementById("status").innerText = "✅ Payment Successful! Redirecting...";
+
+setTimeout(() => {
+  window.location.href = "/dashboard.html";
+}, 3000);
 } else {
   document.getElementById("status").innerText = "⏳ Payment received. Updating wallet...";
 }
