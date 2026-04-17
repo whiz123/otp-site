@@ -782,6 +782,29 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!--End of Tawk.to Script-->
+
+<!-- SAFE PREMIUM CHAT EFFECT -->
+<style>
+iframe[title="chat widget"] {
+  box-shadow: 0 0 15px rgba(0,123,255,0.5);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+</style>
+
+<script>
+// Gentle bounce (not aggressive)
+setInterval(() => {
+  const chat = document.querySelector('iframe[title="chat widget"]');
+  if (chat) {
+    chat.style.transform = "translateY(-6px)";
+    
+    setTimeout(() => {
+      chat.style.transform = "translateY(0)";
+    }, 250);
+  }
+}, 3500); // slower = more professional
+</script>
   
 </body>
 </html>
