@@ -1,161 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Payment Successful</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Status</title>
 </head>
+<body style="text-align:center; font-family:Arial; margin-top:100px;">
 
-<body style="font-family: Arial; text-align: center; padding: 30px;">
+  <h1 id="status">Verifying payment...</h1>
 
- <h2 id="title">Checking payment...</h2>
-<p id="status">Initializing...</p>
-<h3 id="otpBox" style="margin-top:20px; color:green;"></h3> 
+  <script>
+    async function verifyPayment() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const reference = urlParams.get("reference");
 
-
-<script>
-
-const API = "https://otp-backend-srw4.onrender.com";
-
- // 🔥 SAVE ORDER FUNCTION (PASTE HERE)
-function saveOrder(data) {
-  const email = localStorage.getItem("user_email") || "guest";
-
-  let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
-
-  orders.unshift({
-    id: Date.now(),
-    number: data.number,
-    service: data.service,
-    country: data.country,
-    status: "waiting",
-    otp: null,
-    retry_used: false
-  });
-
-  localStorage.setItem("orders_" + email, JSON.stringify(orders));
-} 
-const urlParams = new URLSearchParams(window.location.search);
-const reference = urlParams.get("reference");
-// ✅ VERIFY PAYMENT BEFORE ANYTHING
-async function verifyPayment() {
-  if (!reference || reference === "null") {
-    document.getElementById("title").innerText = "Payment Failed ❌";
-    document.getElementById("status").innerText = "No valid transaction.";
-    return false;
-  }
-
-  try {
-    const res = await fetch(`${API}/verify?reference=${reference}`);
-    const data = await res.json();
-
-    if (!data.success) {
-      document.getElementById("title").innerText = "Payment Failed ❌";
-      document.getElementById("status").innerText = "Payment not completed.";
-      return false;
-    }
-
-    document.getElementById("title").innerText = "Payment Successful";
-    return true;
-
-  } catch (err) {
-    document.getElementById("title").innerText = "Error ❌";
-    document.getElementById("status").innerText = "Verification failed.";
-    return false;
-  }
-}
-  
-// get saved values
-const country = localStorage.getItem("country");
-const service = localStorage.getItem("service");
-
-async function getOTP() {
-  try {
-
-    // BUY NUMBER
-    const res = await fetch(`${API}/buy-number`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-  country,
-  service,
-  reference
-})
-    });
-
-    const data = await res.json();
-
-    // ❌ if failed
-    if (!data.id) {
-      document.getElementById("status").innerText = "Error buying number";
-      return;
-    }
-
-    // ✅ SHOW NUMBER IMMEDIATELY
-    document.getElementById("status").innerText = "Number ready ✅";
-
-    document.getElementById("otpBox").innerText =
-      "📱 Number: " + data.phone + "\n⏳ Waiting for OTP...";
-
-    const id = data.id;
-
-    // 🔥 SAVE ORDER HERE (ONCE)
-
-saveOrder({
-  number: data.phone,
-  service: "WhatsApp", // or your selected service
-  country: "USA" // or your selected country
-});
-
-const interval = setInterval(async () => {
-
-    // 🔁 CHECK FOR OTP
-
-      const check = await fetch(`${API}/check?id=${id}`);
-      const sms = await check.json();
-
-      // ✅ FIXED FOR 5SIM RESPONSE
-      if (sms.sms && sms.sms.length > 0) {
-
-        clearInterval(interval);
-
-        const code = sms.sms[0].code;
-
-        // 🔥 UPDATE ORDER TO SUCCESS
-const email = localStorage.getItem("user_email") || "guest";
-let orders = JSON.parse(localStorage.getItem("orders_" + email)) || [];
-
-if (orders.length > 0) {
-  orders[0].status = "success";
-  orders[0].otp = code;
-}
-
-localStorage.setItem("orders_" + email, JSON.stringify(orders));
-
-        document.getElementById("status").innerText = "OTP received ✅";
-
-        document.getElementById("otpBox").innerText =
-          "📱 Number: " + data.phone +
-          "\n🎉 OTP: " + code;
-
+      if (!reference) {
+        document.getElementById("status").innerText = "No reference found ❌";
+        return;
       }
 
-    }, 2000);
+      try {
+        const res = await fetch("https://otp-backend-srw4.onrender.com/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ reference })
+        });
 
-  } catch (err) {
-    document.getElementById("status").innerText = "Error getting OTP";
-  }
-}
+        const data = await res.json();
 
-// run immediately
-verifyPayment().then(ok => {
-  if (ok) {
-    getOTP();
-  }
-});
+        if (data.success) {
+          document.getElementById("status").innerText = "Payment Successful ✅";
+        } else {
+          document.getElementById("status").innerText = "Verification failed ❌";
+        }
 
-</script>
+      } catch (err) {
+        document.getElementById("status").innerText = "Error verifying payment ❌";
+      }
+    }
+
+    verifyPayment();
+  </script>
 
 </body>
 </html>
