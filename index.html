@@ -309,7 +309,7 @@ async function loadData() {
     updatePrice();
   }
 
-  await loadServices();
+  loadServices();
 
   countrySelect.addEventListener("change", loadServices);
   serviceSelect.addEventListener("change", updatePrice);
