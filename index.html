@@ -323,35 +323,6 @@ document.getElementById("buyBtn").addEventListener("click", async () => {
 
   if (!email) return alert("Enter your email");
 
-  try {
-    const res = await fetch(`${API}/create-payment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        amount,
-        country,
-        service
-      })
-    });
-
-    const data = await res.json();
-
-    if (data && data.data && data.data.checkout_url) {
-      saveSelection(country, service);
-      window.location.href = data.data.checkout_url;
-    } else {
-      console.log(data);
-      alert(JSON.stringify(data));
-    }
-
-  } catch (err) {
-    console.log(err);
-    alert("Payment failed");
-  }
-});
 
 // 🔥 EMAIL SYSTEM (FIXED)
 
