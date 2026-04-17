@@ -10,8 +10,7 @@
   <script>
     async function verifyPayment() {
       const urlParams = new URLSearchParams(window.location.search);
-      const reference = urlParams.get("reference");
-
+      const reference = urlParams.get("trxref") || urlParams.get("reference");
       if (!reference) {
         document.getElementById("status").innerText = "No reference found ❌";
         return;
@@ -28,11 +27,11 @@
 
         const data = await res.json();
 
-        if (data.success) {
-          document.getElementById("status").innerText = "Payment Successful ✅";
-        } else {
-          document.getElementById("status").innerText = "Verification failed ❌";
-        }
+          if (data.success === true) {
+  document.getElementById("status").innerText = "✅ Payment Successful!";
+} else {
+  document.getElementById("status").innerText = "⏳ Payment received. Updating wallet...";
+}
 
       } catch (err) {
         document.getElementById("status").innerText = "Error verifying payment ❌";
