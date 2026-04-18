@@ -710,35 +710,14 @@ function submitFund() {
   const amount = document.getElementById("fundAmount").value;
 
   if (!amount || Number(amount) < 100) {
-    alert("Enter valid amount");
+    alert("Minimum amount is ₦100");
     return;
   }
 
-  // custom popup (works on phone)
-  const msg = document.createElement("div");
-  msg.innerText = "Payment received. Awaiting confirmation.";
-  msg.style.position = "fixed";
-  msg.style.bottom = "20px";
-  msg.style.left = "50%";
-  msg.style.transform = "translateX(-50%)";
-  msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
-  msg.style.background = "linear-gradient(135deg, #007bff, #0056d2)";
-msg.style.color = "white";
-msg.style.padding = "12px 20px";
-msg.style.borderRadius = "12px";
-msg.style.fontSize = "14px";
-msg.style.fontWeight = "500";
-msg.style.boxShadow = "0 6px 20px rgba(0,0,0,0.2)";
-msg.style.zIndex = "9999";
-  document.body.appendChild(msg);
-
-  setTimeout(() => {
-    msg.remove();
-  }, 3000);
-
-  closeFund();
+  // ✅ Redirect to Korapay backend
+  window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}`;
 }
-
+  
 </script>
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
