@@ -8,7 +8,8 @@
   <h1>Welcome 👋</h1>
   <h2>Your Balance:</h2>
   <h2 id="balance">₦0</h2>
-
+<button onclick="setEmail()">Set Email</button>
+  
   <script>
     async function loadBalance() {
       const email = localStorage.getItem("email");
@@ -29,6 +30,21 @@
       }
     }
 
+    <script>
+
+function setEmail() {
+  localStorage.setItem("email", "ceo@gopayna.com");
+  alert("Email set! Refresh page.");
+}
+
+async function loadBalance() {
+  const email = localStorage.getItem("email");
+
+  if (!email) {
+    document.getElementById("balance").innerText = "₦0";
+    return;
+  }
+    
     loadBalance();
   </script>
 
