@@ -10,6 +10,11 @@
   <script>
     async function verifyPayment() {
       const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email");
+
+if (email) {
+  localStorage.setItem("email", email);
+}
       const reference = urlParams.get("trxref") || urlParams.get("reference");
       if (!reference) {
         document.getElementById("status").innerText = "No reference found ❌";
