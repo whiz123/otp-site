@@ -598,17 +598,69 @@ align-items:center;
 z-index:9999;
 ">
 
+<div id="fundModal" style="
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+">
+
   <div style="
-  background:#ffffff;
-  padding:25px;
-  border-radius:16px;
-  width:85%;
-  max-width:320px;
-  text-align:center;
-  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    background:#fff;
+    width:90%;
+    max-width:400px;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.2);
+    font-family:sans-serif;
   ">
 
     <h2 style="margin-bottom:10px;">💳 Fund Wallet</h2>
+
+    <p style="font-size:13px; color:#777; margin-bottom:15px;">
+      Secure payment powered by Korapay
+    </p>
+
+    <input id="amountInput" type="number" placeholder="Enter amount (₦)"
+      style="
+        width:100%;
+        padding:14px;
+        border-radius:10px;
+        border:1px solid #ddd;
+        margin-bottom:15px;
+        font-size:16px;
+      "
+    >
+
+    <button onclick="startPayment()" style="
+      width:100%;
+      padding:14px;
+      background:#2d6cdf;
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:600;
+    ">
+      Pay Securely
+    </button>
+
+    <button onclick="closeFund()" style="
+      width:100%;
+      margin-top:10px;
+      background:none;
+      border:none;
+      color:#999;
+    ">
+      Cancel
+    </button>
+
+  </div>
+</div>
 
 
 <!-- ✅ ADD THIS HERE -->
@@ -683,21 +735,13 @@ function payNow() {
   });
 }
 
-function openFund() {
+function fundWallet() {
   document.getElementById("fundModal").style.display = "flex";
 }
 
 function closeFund() {
   document.getElementById("fundModal").style.display = "none";
 }
-
-function submitFund() {
-  const amount = document.getElementById("fundAmount").value;
-
-  if (!amount || Number(amount) < 100) {
-    alert("Enter valid amount");
-    return;
-  }
 
   // custom popup (works on phone)
   const msg = document.createElement("div");
@@ -761,9 +805,9 @@ setInterval(() => {
   }
 }, 3500); // slower = more professional
 
-async function fundWallet() {
+async function startPayment() {
   const email = localStorage.getItem("email");
-  const amount = prompt("Enter amount");
+  const amount = document.getElementById("amountInput").value;
 
   if (!email) {
     alert("User not logged in");
@@ -788,7 +832,7 @@ async function fundWallet() {
   if (data.checkout_url) {
     window.location.href = data.checkout_url;
   } else {
-    alert("Error starting payment");
+    alert("Payment failed");
   }
 }
   
