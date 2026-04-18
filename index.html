@@ -620,61 +620,20 @@ z-index:9999;
   margin-bottom:12px;
   text-align:left;
 ">
-
-  <p style="margin:0; font-size:13px; color:#777;">Bank</p>
-  <p style="margin:0 0 8px 0; font-weight:600;">Moniepoint MFB</p>
-
-  <p style="margin:0; font-size:13px; color:#777;">Account Name</p>
-  <p style="margin:0 0 8px 0; font-weight:600;">GOPAYNA TECHNOLOGIES</p>
-
-  <p style="margin:0; font-size:13px; color:#777;">Account Number</p>
-  <p style="
-    margin:0;
-    font-size:18px;
-    font-weight:700;
-    color:#2d6cdf;
-  ">
-    6399730251
-  </p>
-
-</div>
-
-<p style="font-size:13px; color:#e63946;">
-⚠️ Use your registered email as narration
-</p>
-
-<input id="fundAmount" type="number" placeholder="Enter amount (₦)"
-    style="
-    width:100%;
-    padding:14px;
-    border-radius:10px;
-    border:1px solid #ddd;
-    margin-top:10px;
-    font-size:16px;
-    ">
-
-    <button onclick="submitFund()" style="
-  margin-top:15px;
+  
+<button onclick="fundWallet()" style="
   width:100%;
   padding:14px;
-  background:#007bff;
+  background:#2d6cdf;
   color:white;
   border:none;
   border-radius:10px;
   font-size:16px;
+  margin-top:10px;
 ">
-  I HAVE PAID
+  💳 Fund Wallet (Instant)
 </button>
-
-    <button onclick="closeFund()" style="
-    margin-top:10px;
-    background:none;
-    border:none;
-    color:#999;
-    ">
-    Cancel
-    </button>
-
+  
   </div>
 </div>
 
@@ -801,6 +760,38 @@ setInterval(() => {
     }, 250);
   }
 }, 3500); // slower = more professional
+
+async function fundWallet() {
+  const email = localStorage.getItem("email");
+  const amount = prompt("Enter amount");
+
+  if (!email) {
+    alert("User not logged in");
+    return;
+  }
+
+  if (!amount) {
+    alert("Enter amount");
+    return;
+  }
+
+  const res = await fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, amount })
+  });
+
+  const data = await res.json();
+
+  if (data.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    alert("Error starting payment");
+  }
+}
+  
 </script>
   
 </body>
