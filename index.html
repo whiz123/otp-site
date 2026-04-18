@@ -621,17 +621,30 @@ z-index:9999;
   text-align:left;
 ">
   
-<button onclick="fundWallet()" style="
+<input id="fundAmount" type="number" placeholder="Enter amount (₦100 minimum)"
+style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-top:10px;">
+
+<button onclick="submitFund()" style="
   width:100%;
-  padding:14px;
-  background:#2d6cdf;
+  margin-top:10px;
+  padding:12px;
+  background:linear-gradient(135deg,#2d6cdf,#1a4bb8);
   color:white;
   border:none;
   border-radius:10px;
-  font-size:16px;
-  margin-top:10px;
 ">
-  💳 Fund Wallet (Instant)
+  Continue Payment
+</button>
+
+<button onclick="closeFund()" style="
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  background:#eee;
+  border:none;
+  border-radius:10px;
+">
+  Cancel
 </button>
   
   </div>
