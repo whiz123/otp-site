@@ -10,7 +10,7 @@
   <script>
 async function verifyPayment() {
   const urlParams = new URLSearchParams(window.location.search);
-  const reference = urlParams.get("ref");
+  const reference = urlParams.get("reference");
 
   if (!reference) {
     document.getElementById("status").innerText = "❌ No reference found";
