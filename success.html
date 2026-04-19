@@ -22,7 +22,9 @@ async function verifyPayment() {
     const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}&email=${email}`)
     const data = await res.json();
 
-    if (data.success) {
+    console.log(data);
+
+    if (data.success || data.status === "success") {
       document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
 
       // Optional: redirect back after 3 seconds
