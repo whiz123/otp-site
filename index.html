@@ -715,7 +715,9 @@ function submitFund() {
   }
 
   // ✅ Redirect to Korapay backend
-  window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}`;
+  const email = localStorage.getItem("email") || "test@gmail.com";
+
+window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}&email=${email}`;
 }
   
 </script>
