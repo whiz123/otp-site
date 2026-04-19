@@ -33,7 +33,7 @@ async function verifyPayment() {
       }, 3000);
 
     } else {
-      document.getElementById("status").innerText = "❌ Payment failed";
+      document.getElementById("status").innerText = "❌ " + JSON.stringify(data);
     }
 
   } catch (err) {
