@@ -11,6 +11,7 @@
 async function verifyPayment() {
   const urlParams = new URLSearchParams(window.location.search);
   const reference = urlParams.get("reference");
+ const email = localStorage.getItem("email"); 
 
   if (!reference) {
     document.getElementById("status").innerText = "❌ No reference found";
@@ -18,7 +19,7 @@ async function verifyPayment() {
   }
 
   try {
-    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}`);
+    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}&email=${email}`)
     const data = await res.json();
 
     if (data.success) {
