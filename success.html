@@ -8,7 +8,7 @@
   <h1 id="status">Verifying payment...</h1>
 
   <script>
-    async function verifyPayment() {
+async function verifyPayment() {
   const urlParams = new URLSearchParams(window.location.search);
   const reference = urlParams.get("ref");
 
@@ -18,18 +18,19 @@
   }
 
   try {
-    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?ref=${reference}`);
+    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}`);
     const data = await res.json();
 
-    if (data.success === true) {
-      document.getElementById("status").innerText = "✅ Payment Successful! Redirecting...";
+    if (data.success) {
+      document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
 
+      // Optional: redirect back after 3 seconds
       setTimeout(() => {
-        window.location.href = "/dashboard.html";
+        window.location.href = "/";
       }, 3000);
 
     } else {
-      document.getElementById("status").innerText = "⏳ Payment received. Updating wallet...";
+      document.getElementById("status").innerText = "❌ Payment failed";
     }
 
   } catch (err) {
@@ -37,8 +38,8 @@
   }
 }
 
-    verifyPayment();
-  </script>
+verifyPayment();
+</script>
 
 </body>
 </html>
