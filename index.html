@@ -667,11 +667,25 @@ function closeFund() {
 // ✅ PAYMENT FUNCTION (FIXED)
 function payNow() {
   const amount = document.getElementById("fundAmount").value;
-  const email = document.getElementById("email").value;
+  const emailInput = document.getElementById("email");
 
-  if (!email) return alert("Enter email first");
-  if (!amount || isNaN(amount)) return alert("Invalid amount");
+  const email = emailInput ? emailInput.value : null;
 
+  // ✅ VALIDATION
+  if (!email) {
+    alert("Enter email first");
+    return;
+  }
+
+  if (!amount || isNaN(amount)) {
+    alert("Invalid amount");
+    return;
+  }
+
+  // ✅ SAVE EMAIL FOR SUCCESS PAGE
+  localStorage.setItem("userEmail", email);
+
+  // ✅ CALL BACKEND
   fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
     method: "POST",
     headers: {
@@ -682,42 +696,21 @@ function payNow() {
       amount: Number(amount)
     })
   })
+  .then(res => res.json())
   .then(data => {
-  console.log("FULL RESPONSE:", data);
+    console.log("FULL RESPONSE:", data);
 
-  if (data?.data?.checkout_url || data?.checkout_url) {
-    window.location.href = data.data?.checkout_url || data.checkout_url;
-  } 
-  else {
-    alert("Payment server slow, please try again");
-  }
-})
+    // ✅ REDIRECT TO KORAPAY
+    if (data?.data?.checkout_url || data?.checkout_url) {
+      window.location.href = data.data?.checkout_url || data.checkout_url;
+    } else {
+      alert("Payment server slow, please try again");
+    }
+  })
   .catch(err => {
     console.log(err);
     alert("Something went wrong");
   });
-}
-
-function openFund() {
-  document.getElementById("fundModal").style.display = "flex";
-}
-
-function closeFund() {
-  document.getElementById("fundModal").style.display = "none";
-}
-
-function submitFund() {
-  const amount = document.getElementById("fundAmount").value;
-
-  if (!amount || Number(amount) < 100) {
-    alert("Minimum amount is ₦100");
-    return;
-  }
-
-  // ✅ Redirect to Korapay backend
-  const email = localStorage.getItem("email") || "test@gmail.com";
-
-window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}&email=${email}`;
 }
   
 </script>
