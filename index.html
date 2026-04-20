@@ -653,6 +653,7 @@ style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; marg
 </div>
 
 <script>
+
 // ✅ OPEN MODAL
 function openFund() {
   document.getElementById("fundModal").style.display = "flex";
@@ -663,25 +664,14 @@ function closeFund() {
   document.getElementById("fundModal").style.display = "none";
 }
 
-// ✅ ONLY ONE PAYMENT FUNCTION
-function submitFund() {
+// ✅ PAYMENT FUNCTION (FIXED)
+function payNow() {
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
 
-  if (!email) {
-    alert("Enter email first");
-    return;
-  }
+  if (!email) return alert("Enter email first");
+  if (!amount || isNaN(amount)) return alert("Invalid amount");
 
-  if (!amount || Number(amount) < 100) {
-    alert("Minimum amount is ₦100");
-    return;
-  }
-
-  // ✅ SAVE EMAIL (for success page)
-  localStorage.setItem("userEmail", email);
-
-  // ✅ CALL BACKEND
   fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
     method: "POST",
     headers: {
@@ -692,20 +682,42 @@ function submitFund() {
       amount: Number(amount)
     })
   })
-  .then(res => res.json())
   .then(data => {
-    console.log("FULL RESPONSE:", data);
+  console.log("FULL RESPONSE:", data);
 
-    if (data?.data?.checkout_url || data?.checkout_url) {
-      window.location.href = data.data?.checkout_url || data.checkout_url;
-    } else {
-      alert("Payment failed, try again");
-    }
-  })
+  if (data?.data?.checkout_url || data?.checkout_url) {
+    window.location.href = data.data?.checkout_url || data.checkout_url;
+  } 
+  else {
+    alert("Payment server slow, please try again");
+  }
+})
   .catch(err => {
     console.log(err);
-    alert("Server error");
+    alert("Something went wrong");
   });
+}
+
+function openFund() {
+  document.getElementById("fundModal").style.display = "flex";
+}
+
+function closeFund() {
+  document.getElementById("fundModal").style.display = "none";
+}
+
+function submitFund() {
+  const amount = document.getElementById("fundAmount").value;
+
+  if (!amount || Number(amount) < 100) {
+    alert("Minimum amount is ₦100");
+    return;
+  }
+
+  // ✅ Redirect to Korapay backend
+  const email = localStorage.getItem("userEmail");
+
+window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}&email=${email}`;
 }
   
 </script>
