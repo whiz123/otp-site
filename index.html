@@ -708,45 +708,15 @@ function closeFund() {
 
 function submitFund() {
   const amount = document.getElementById("fundAmount").value;
-  const email = document.getElementById("email").value;
-
-  if (!email) {
-    alert("Enter email first");
-    return;
-  }
 
   if (!amount || Number(amount) < 100) {
     alert("Minimum amount is ₦100");
     return;
   }
 
-  // ✅ SAVE EMAIL
-  localStorage.setItem("userEmail", email);
+  const checkoutUrl = data.data?.checkout_url || data.checkout_url;
 
-  // ✅ CALL BACKEND
-  fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: email,
-      amount: Number(amount)
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    const checkoutUrl = data?.data?.checkout_url || data?.checkout_url;
-
-    if (checkoutUrl) {
-      window.location.href = checkoutUrl + `&email=${encodeURIComponent(email)}`;
-    } else {
-      alert("Payment failed, try again");
-    }
-  })
-  .catch(() => {
-    alert("Server error");
-  });
+  window.location.href = checkoutUrl + `&email=${encodeURIComponent(email)}`;
 }
   
 </script>
