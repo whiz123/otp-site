@@ -3,46 +3,59 @@
 <head>
   <title>Payment Status</title>
 </head>
+
 <body style="text-align:center; font-family:Arial; margin-top:100px;">
 
-  <h1 id="status">Verifying payment...</h1>
+  <h1 id="status">⏳ Verifying payment...</h1>
 
   <script>
-async function verifyPayment() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const reference = urlParams.get("reference");
- const email = localStorage.getItem("email"); 
+    async function verifyPayment() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const reference = urlParams.get("reference");
 
-  if (!reference) {
-    document.getElementById("status").innerText = "❌ No reference found";
-    return;
-  }
+      // ✅ GET EMAIL FROM STORAGE (FIXED)
+      const email = localStorage.getItem("userEmail");
 
-  try {
-    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}&email=${email}`)
-    const data = await res.json();
+      if (!reference) {
+        document.getElementById("status").innerText = "❌ No reference found";
+        return;
+      }
 
-    console.log(data);
+      if (!email) {
+        document.getElementById("status").innerText = "❌ No user email found";
+        return;
+      }
 
-    if (data.success || data.status === "success") {
-      document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
+      try {
+        const res = await fetch(
+          `https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}&email=${email}`
+        );
 
-      // Optional: redirect back after 3 seconds
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 3000);
+        const data = await res.json();
+        console.log("VERIFY RESULT:", data);
 
-    } else {
-      document.getElementById("status").innerText = "❌ " + JSON.stringify(data);
+        if (data.success) {
+          document.getElementById("status").innerText =
+            "✅ Payment successful! Wallet funded.";
+
+          // 🔥 Redirect back after 3 seconds
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 3000);
+
+        } else {
+          document.getElementById("status").innerText =
+            "❌ Payment not confirmed yet.";
+        }
+
+      } catch (err) {
+        document.getElementById("status").innerText =
+          "⚠️ Error verifying payment";
+      }
     }
 
-  } catch (err) {
-    document.getElementById("status").innerText = "❌ Error verifying payment";
-  }
-}
-
-verifyPayment();
-</script>
+    verifyPayment();
+  </script>
 
 </body>
 </html>
