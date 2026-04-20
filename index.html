@@ -669,9 +669,6 @@ function payNow() {
   const amount = document.getElementById("fundAmount").value;
   const email = document.getElementById("email").value;
 
-  // ✅ ADD THIS LINE (VERY IMPORTANT)
-  localStorage.setItem("userEmail", email);
-
   if (!email) return alert("Enter email first");
   if (!amount || isNaN(amount)) return alert("Invalid amount");
 
@@ -685,22 +682,22 @@ function payNow() {
       amount: Number(amount)
     })
   })
-  .then(res => res.json())
   .then(data => {
-    console.log("FULL RESPONSE:", data);
+  console.log("FULL RESPONSE:", data);
 
-    if (data?.data?.checkout_url || data?.checkout_url) {
-      window.location.href = data.data?.checkout_url || data.checkout_url;
-    } else {
-      alert("Payment server slow, please try again");
-    }
-  })
+  if (data?.data?.checkout_url || data?.checkout_url) {
+    window.location.href = data.data?.checkout_url || data.checkout_url;
+  } 
+  else {
+    alert("Payment server slow, please try again");
+  }
+})
   .catch(err => {
     console.log(err);
     alert("Something went wrong");
   });
 }
-  
+
 function openFund() {
   document.getElementById("fundModal").style.display = "flex";
 }
