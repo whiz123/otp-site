@@ -714,10 +714,14 @@ function submitFund() {
     return;
   }
 
-  const checkoutUrl = data.data?.checkout_url || data.checkout_url;
+  // ✅ SAVE EMAIL FIRST
+const emailInput = document.getElementById("email").value;
+localStorage.setItem("userEmail", emailInput);
 
-  window.location.href = checkoutUrl + `&email=${encodeURIComponent(email)}`;
-}
+// ✅ THEN USE IT
+const email = emailInput;
+
+window.location.href = `https://otp-backend-srw4.onrender.com/fund-wallet?amount=${amount}&email=${email}`;
   
 </script>
 <!--Start of Tawk.to Script-->
