@@ -9,50 +9,38 @@
   <h1 id="status">Verifying payment...</h1>
 
   <script>
-    async function verifyPayment() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const reference = urlParams.get("reference");
+async function verifyPayment() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const reference = urlParams.get("reference");
 
-      // ✅ GET EMAIL FROM LOCAL STORAGE
-      const email = localStorage.getItem("userEmail");
+  if (!reference) {
+    document.getElementById("status").innerText = "❌ No reference found";
+    return;
+  }
 
-      if (!reference) {
-        document.getElementById("status").innerText = "❌ No reference found";
-        return;
-      }
+  try {
+    const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}`);
+    const data = await res.json();
 
-      if (!email) {
-        document.getElementById("status").innerText = "❌ No email found";
-        return;
-      }
+    console.log("VERIFY RESPONSE:", data);
 
-      try {
-        const res = await fetch(`https://otp-backend-srw4.onrender.com/verify-payment?reference=${reference}&email=${email}`);
-        const data = await res.json();
+    if (data.success === true) {
+      document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
 
-        console.log("VERIFY RESPONSE:", data);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
 
-        // ✅ ONLY CHECK THIS
-        if (data.success === true) {
-          document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
-
-          // Redirect after 3 seconds
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 3000);
-
-        } else {
-          document.getElementById("status").innerText = "❌ " + (data.message || "Payment failed");
-        }
-
-      } catch (err) {
-        console.log(err);
-        document.getElementById("status").innerText = "❌ Error verifying payment";
-      }
+    } else {
+      document.getElementById("status").innerText = "❌ Payment failed";
     }
 
-    verifyPayment();
-  </script>
+  } catch (err) {
+    console.log(err);
+    document.getElementById("status").innerText = "❌ Error verifying payment";
+  }
+}
 
-</body>
+verifyPayment();
+</script>
 </html>
