@@ -803,8 +803,8 @@ async function fundWallet() {
 
 <script>
 function loadBalance() {
-  const email = localStorage.getItem("email");
-
+  const email = localStorage.getItem("userEmail");
+  
   if (!email) return;
 
   fetch(`https://otp-backend-srw4.onrender.com/get-user?email=${email}`)
@@ -823,6 +823,17 @@ loadBalance();
 // refresh every 3 seconds
 setInterval(loadBalance, 3000);
   
+</script>
+
+<script>
+const emailInput = document.getElementById("email");
+
+if (emailInput) {
+  emailInput.addEventListener("input", function () {
+    localStorage.setItem("userEmail", this.value);
+    console.log("Saved email:", this.value);
+  });
+}
 </script>
   
 </body>
