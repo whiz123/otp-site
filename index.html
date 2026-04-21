@@ -801,33 +801,27 @@ async function fundWallet() {
   }
 }
 
-
-// ==========================
-// LOAD BALANCE (AUTO UPDATE)
-// ==========================
-async function loadBalance() {
-  const email = localStorage.getItem("userEmail");
+<script>
+function loadBalance() {
+  const email = localStorage.getItem("email");
 
   if (!email) return;
 
-  try {
-    const res = await fetch(`https://otp-backend-srw4.onrender.com/get-balance?email=${email}`);
-    const data = await res.json();
-
-    if (data.balance !== undefined) {
-      document.getElementById("balance").innerText = Number(data.balance).toFixed(2);
-    }
-
-  } catch (err) {
-    console.log("Balance error:", err);
-  }
+  fetch(`https://otp-backend-srw4.onrender.com/get-user?email=${email}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("balance").innerText = "₦" + data.balance;
+      }
+    })
+    .catch(err => console.log("Balance error:", err));
 }
 
+// run immediately
+loadBalance();
 
-// ==========================
-// AUTO REFRESH EVERY 2s
-// ==========================
-setInterval(loadBalance, 2000);
+// refresh every 3 seconds
+setInterval(loadBalance, 3000);
   
 </script>
   
