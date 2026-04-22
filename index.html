@@ -770,7 +770,7 @@ async function fundWallet() {
     return;
   }
 
-  const email = localStorage.getItem("userEmail");
+  const email = document.getElementById("email").value;
   const amount = amountInput.value;
 
   if (!email || !amount) {
@@ -803,7 +803,7 @@ async function fundWallet() {
 
 <script>
 function loadBalance() {
-  const email = localStorage.getItem("userEmail");
+  const email = document.getElementById("email").value;
   
   if (!email) return;
 
