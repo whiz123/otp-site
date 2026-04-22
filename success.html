@@ -11,7 +11,18 @@
   <script>
 async function verifyPayment() {
   const urlParams = new URLSearchParams(window.location.search);
-  const reference = urlParams.get("ref");
+
+  // ✅ FIXED (was "ref")
+  const reference = urlParams.get("reference");
+
+  // ✅ GET USER EMAIL
+  const email = urlParams.get("email");
+
+  // ✅ SAVE EMAIL FOR DASHBOARD
+  if (email) {
+    localStorage.setItem("email", email);
+    console.log("EMAIL SAVED:", email);
+  }
 
   if (!reference) {
     document.getElementById("status").innerText = "❌ No reference found";
@@ -27,8 +38,9 @@ async function verifyPayment() {
     if (data.success === true) {
       document.getElementById("status").innerText = "✅ Payment successful! Wallet funded.";
 
+      // ✅ REDIRECT TO DASHBOARD (NOT "/")
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = "/dashboard.html";
       }, 3000);
 
     } else {
@@ -43,4 +55,6 @@ async function verifyPayment() {
 
 verifyPayment();
 </script>
+
+</body>
 </html>
