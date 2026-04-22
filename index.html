@@ -770,7 +770,7 @@ async function fundWallet() {
     return;
   }
 
-  const email = document.getElementById("email").value;
+  const email = localStorage.getItem("userEmail");
   const amount = amountInput.value;
 
   if (!email || !amount) {
@@ -801,39 +801,34 @@ async function fundWallet() {
   }
 }
 
-<script>
-function loadBalance() {
-  const email = document.getElementById("email").value;
-  
+
+// ==========================
+// LOAD BALANCE (AUTO UPDATE)
+// ==========================
+async function loadBalance() {
+  const email = localStorage.getItem("userEmail");
+
   if (!email) return;
 
-  fetch(`https://otp-backend-srw4.onrender.com/get-user?email=${email}`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        document.getElementById("balance").innerText = "₦" + data.balance;
-      }
-    })
-    .catch(err => console.log("Balance error:", err));
+  try {
+    const res = await fetch(`https://otp-backend-srw4.onrender.com/get-balance?email=${email}`);
+    const data = await res.json();
+
+    if (data.balance !== undefined) {
+      document.getElementById("balance").innerText = Number(data.balance).toFixed(2);
+    }
+
+  } catch (err) {
+    console.log("Balance error:", err);
+  }
 }
 
-// run immediately
-loadBalance();
 
-// refresh every 3 seconds
-setInterval(loadBalance, 3000);
+// ==========================
+// AUTO REFRESH EVERY 2s
+// ==========================
+setInterval(loadBalance, 2000);
   
-</script>
-
-<script>
-const emailInput = document.getElementById("email");
-
-if (emailInput) {
-  emailInput.addEventListener("input", function () {
-    localStorage.setItem("userEmail", this.value);
-    console.log("Saved email:", this.value);
-  });
-}
 </script>
   
 </body>
