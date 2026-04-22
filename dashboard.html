@@ -6,11 +6,25 @@
 <body style="text-align:center; font-family:Arial; margin-top:100px;">
 
   <h1>Welcome 👋</h1>
+
   <h2>Your Balance:</h2>
   <h2 id="balance">₦0</h2>
-<button onclick="setEmail()">Set Email</button>
-  
+
+  <button onclick="setEmail()">Set Email</button>
+
   <script>
+    function setEmail() {
+      const email = prompt("Enter your email:");
+
+      if (!email) {
+        alert("No email entered");
+        return;
+      }
+
+      localStorage.setItem("email", email);
+      alert("Email saved! Refresh page.");
+    }
+
     async function loadBalance() {
       const email = localStorage.getItem("email");
 
@@ -20,31 +34,21 @@
       }
 
       try {
-        const res = await fetch("https://otp-backend-srw4.onrender.com/balance?email=" + email);
+        const res = await fetch("https://otp-backend-srw4.onrender.com/get-user?email=" + email);
         const data = await res.json();
 
-        document.getElementById("balance").innerText = "₦" + data.balance;
+        if (data.success) {
+          document.getElementById("balance").innerText = "₦" + data.balance;
+        } else {
+          document.getElementById("balance").innerText = "₦0";
+        }
+
       } catch (err) {
         console.log(err);
         document.getElementById("balance").innerText = "₦0";
       }
     }
 
-    <script>
-
-function setEmail() {
-  localStorage.setItem("email", "ceo@gopayna.com");
-  alert("Email set! Refresh page.");
-}
-
-async function loadBalance() {
-  const email = localStorage.getItem("email");
-
-  if (!email) {
-    document.getElementById("balance").innerText = "₦0";
-    return;
-  }
-    
     loadBalance();
   </script>
 
