@@ -757,77 +757,36 @@ setInterval(() => {
   }
 }, 3500); // slower = more professional
 
-<script>
-
-// ==========================
-// FUND WALLET FUNCTION
-// ==========================
 async function fundWallet() {
-  const amountInput = document.getElementById("amount");
+  const email = localStorage.getItem("email");
+  const amount = prompt("Enter amount");
 
-  if (!amountInput) {
-    alert("Missing input fields");
+  if (!email) {
+    alert("User not logged in");
     return;
   }
 
-  const email = localStorage.getItem("userEmail");
-  const amount = amountInput.value;
-
-  if (!email || !amount) {
-    alert("Enter email and amount");
+  if (!amount) {
+    alert("Enter amount");
     return;
   }
 
-  try {
-    const res = await fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, amount })
-    });
+  const res = await fetch("https://otp-backend-srw4.onrender.com/fund-wallet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email, amount })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      alert("Error starting payment");
-    }
-
-  } catch (err) {
-    console.log("Fund error:", err);
-    alert("Something went wrong");
+  if (data.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    alert("Error starting payment");
   }
 }
-
-
-// ==========================
-// LOAD BALANCE (AUTO UPDATE)
-// ==========================
-async function loadBalance() {
-  const email = localStorage.getItem("userEmail");
-
-  if (!email) return;
-
-  try {
-    const res = await fetch(`https://otp-backend-srw4.onrender.com/get-balance?email=${email}`);
-    const data = await res.json();
-
-    if (data.balance !== undefined) {
-      document.getElementById("balance").innerText = Number(data.balance).toFixed(2);
-    }
-
-  } catch (err) {
-    console.log("Balance error:", err);
-  }
-}
-
-
-// ==========================
-// AUTO REFRESH EVERY 2s
-// ==========================
-setInterval(loadBalance, 2000);
   
 </script>
   
